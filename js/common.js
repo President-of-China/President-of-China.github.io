@@ -45,32 +45,7 @@ window.getWorkInfo = function(workId, cb) {
   })
 }
 
-window.getQiniuToken = function() {
-  var qn_token;
-  $.ajax({
-    url: '/api/common/qiniu/getToken',
-    beforeSend: function(request) {
-      request.setRequestHeader('X-Access-Token', $.cookie('ACCESS_TOKEN'))
-    },
-    async: false,
-    success: function(res) {
-      console.log(res)
-      if (res.code == 200) {
-        qn_token = res.result
-      } else {
-        //alert(res.message)
-      }
-    },
-    error: function(e) {
-      if (e.responseJSON.status == 500) {
-        //alert(e.responseJSON.message);
-        // location.href = '/'
-      }
-      console.log(e)
-    }
-  });
-  return qn_token;
-}
+
 
 function createCode(id, src) {
   $('#' + id).html('')
