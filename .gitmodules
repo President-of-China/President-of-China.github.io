@@ -1,3 +1,6 @@
 [submodule "drawio"]
 	path = drawio
 	url = https://github.com/jgraph/drawio.git
+[submodule "react-typing"]
+	path = react-typing
+	url = https://github.com/RodneyCumming/react-typing.git
