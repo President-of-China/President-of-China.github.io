@@ -5,7 +5,7 @@
 // selectively enable features needed in the rendering
 // process.
 
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = window.require('electron')
 const search = require('./search')
 
 // search.fill_test()
