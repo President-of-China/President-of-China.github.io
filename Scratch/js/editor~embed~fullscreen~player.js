@@ -13108,7 +13108,7 @@ const PromptComponent = props => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__
   defaultMessage: "Although you can create cloud variables, they won't work unless this project is uploaded to Scratch or converted using a tool like the {packager}.",
   values: {
     packager: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("a", {
-      href: "https://www.mago.cf/packer/dist/",
+      href: "https://www.mago.cf/packer/dist",
       target: "_blank",
       rel: "noopener noreferrer"
     }, 'TurboWarp Packager')
