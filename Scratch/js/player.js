@@ -2456,7 +2456,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 
-const PACKAGER = 'https://packager.turbowarp.org';
+const PACKAGER = 'https://www.mago.cf/packer/dist';
 
 const readBlobAsArrayBuffer = blob => new Promise((resolve, reject) => {
   const fr = new FileReader();
@@ -3252,7 +3252,7 @@ const Footer = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.c
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
   href: "https://desktop.turbowarp.org/"
 }, 'TurboWarp Desktop'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
-  href: "https://packager.turbowarp.org/"
+  href: "https://www.mago.cf/packer/dist/"
 }, 'TurboWarp Packager'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
   href: "https://docs.turbowarp.org/embedding"
 }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_intl__WEBPACK_IMPORTED_MODULE_5__["FormattedMessage"], {
