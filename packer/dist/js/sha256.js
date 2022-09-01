@@ -1,25 +1,4 @@
-exports.ids = ["sha256"];
-exports.modules = {
-
-/***/ "./node_modules/inherits/inherits.js":
-/*!*******************************************!*\
-  !*** ./node_modules/inherits/inherits.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-try {
-  var util = __webpack_require__(/*! util */ "util");
-  /* istanbul ignore next */
-  if (typeof util.inherits !== 'function') throw '';
-  module.exports = util.inherits;
-} catch (e) {
-  /* istanbul ignore next */
-  module.exports = __webpack_require__(/*! ./inherits_browser.js */ "./node_modules/inherits/inherits_browser.js");
-}
-
-
-/***/ }),
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["sha256"],{
 
 /***/ "./node_modules/inherits/inherits_browser.js":
 /*!***************************************************!*\
@@ -68,7 +47,7 @@ if (typeof Object.create === 'function') {
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(/*! buffer */ "buffer")
+var buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")
 var Buffer = buffer.Buffer
 
 // alternative to using Object.keys for old browsers
@@ -242,7 +221,7 @@ module.exports = Hash
  *
  */
 
-var inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits.js")
+var inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")
 var Hash = __webpack_require__(/*! ./hash */ "./node_modules/sha.js/hash.js")
 var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/safe-buffer/index.js").Buffer
 
@@ -373,4 +352,5 @@ module.exports = Sha256
 
 /***/ })
 
-};;
+}]);
+//# sourceMappingURL=sha256.js.map
