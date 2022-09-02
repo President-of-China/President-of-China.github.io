@@ -1,0 +1,225 @@
+<html>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+    charset="UTF-8"
+  />
+
+  <head>
+    <link rel="stylesheet" href="./vendor/highlight.css" />
+    <link rel="stylesheet" href="./src/stylesheet.css" />
+  </head>
+
+  <body>
+    <!-- Categories -->
+    <template>
+      <div class="categories"></div>
+    </template>
+
+    <!-- Category -->
+    <template>
+      <div class="category">
+        <div class="accordion">
+          <div class="title">
+            <div class="headline">Hub</div>
+            <div class="arrow">
+              <svg><use href="#arrow" /></svg>
+            </div>
+          </div>
+          <div class="content">
+            <div class="container"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Title -->
+    <template>
+      <div class="title">Some title</div>
+    </template>
+
+    <!-- Text -->
+    <template>
+      <div class="text">Some text</div>
+    </template>
+
+    <!-- Image -->
+    <template>
+      <div class="image"><img src="./src/assets/images/test.png" /></div>
+    </template>
+
+    <!-- Section -->
+    <template>
+      <div class="section">
+        <div class="handle">
+          <div class="headline">Some section</div>
+          <div class="arrow">
+            <svg><use href="#arrow" /></svg>
+          </div>
+        </div>
+        <div class="container">
+          <div class="back">
+            <svg><use href="#arrow" /></svg>
+            <div class="header">Header</div>
+          </div>
+          <div class="content"></div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Code snippet -->
+    <template>
+      <pre
+        class="snippet"
+      ><div class = 'copy'><img src = './src/assets/icons/copy.svg'></div><div class = 'source'></div><code class = 'python'></code></pre>
+    </template>
+
+    <!-- Parameters -->
+    <template>
+      <div class="parameters"></div>
+    </template>
+
+    <!-- Parameter -->
+    <template>
+      <div class="parameter">
+        <div class="signature">
+          <div class="label"></div>
+        </div>
+
+        <div class="description"></div>
+
+        <div class="type">
+          <div class="label"></div>
+          <div class="space">:</div>
+          <div class="value"></div>
+        </div>
+
+        <div class="values">
+          <div class="label"></div>
+          <div class="space">:</div>
+          <div class="value"></div>
+        </div>
+
+        <div class="default">
+          <div class="label"></div>
+          <div class="space">:</div>
+          <div class="value"></div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Error -->
+    <template>
+      <div class="errors"></div>
+    </template>
+
+    <!-- Error entry -->
+    <template>
+      <div class="error">
+        <div class="type"></div>
+        <div class="description"></div>
+      </div>
+    </template>
+
+    <!-- Return -->
+    <template>
+      <div class="returns">
+        <div class="description"></div>
+        <div class="type">
+          <div class="label"></div>
+          <div class="space">:</div>
+          <div class="value"></div>
+        </div>
+        <div class="values">
+          <div class="label"></div>
+          <div class="space">:</div>
+          <div class="value"></div>
+        </div>
+      </div>
+    </template>
+
+    <div class="view"></div>
+    <svg display="none">
+      <symbol id="arrow">
+        <g
+          id="arrow"
+          transform="translate(7.000000, 4.500000) rotate(-180.000000) translate(-7.000000, -4.500000) "
+        >
+          <polygon
+            id="Path"
+            fill="currentColor"
+            transform="translate(7.000000, 4.666667) rotate(-90.000000) translate(-7.000000, -4.666667) "
+            points="8.83055846 4.666667 3.28382277 -0.880068705 4.22663181 -1.82287775 10.7161766 4.666667 4.22663181 11.1562117 3.28382277 10.2134027"
+          ></polygon>
+        </g>
+      </symbol>
+    </svg>
+  </body>
+  <script src="./vendor/highlight.js"></script>
+  <script src="./vendor/highlight-python.js"></script>
+  <script src="./src/js/clipboard.js"></script>
+  <script src="./src/js/documentation.js"></script>
+  <script src="./src/js/builder.js"></script>
+  <script>
+    var urlParams = new URL(window.location.href).searchParams;
+    var language = urlParams.has("language")
+      ? urlParams
+          .get("language")
+          .toLocaleLowerCase()
+          .replace("-", "_")
+      : "en_us";
+
+    loadScript();
+
+    function loadScript() {
+      // Adding the script tag to the head as suggested before
+      var head = document.head;
+      const url = `./languages/${language}.js`;
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      // Then bind the event to the callback function.
+      // There are several events for cross browser compatibility.
+      script.onreadystatechange = languageLoaded;
+      script.onload = languageLoaded;
+      script.src = url;
+      script.onerror = (e) => {
+        if (language != "en_us") {
+          language = "en_us";
+          head.removeChild(script);
+          loadScript();
+        }
+      };
+      // Fire the loading
+      head.appendChild(script);
+    }
+
+    function languageLoaded() {
+      window.onload = () => {
+        // On Android devices, we need to be able to scroll content to the top, as the keyboard might be open and overlap the content.
+        if (
+          urlParams.get("platform") === "android" ||
+          urlParams.get("platform") === "androidNoUSB" ||
+          urlParams.get("platform") === "ios"
+        ) {
+          document.querySelector("body").classList.add("additional-scrolling");
+        }
+
+        var builder = new Builder();
+
+        var templates = document.querySelectorAll("template");
+        var dom = builder.build(data, templates);
+
+        document.querySelector(".view").append(dom);
+
+        var doc = new Documentation({
+          element: document.querySelector(".master > .categories"),
+          maxOneCategory: true,
+        });
+
+        document.querySelector("body").onresize = () => {
+          doc.resize();
+        };
+      };
+    }
+  </script>
+</html>
