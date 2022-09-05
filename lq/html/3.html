@@ -1,0 +1,789 @@
+
+				<!DOCTYPE html>
+				<html>
+					<head>
+						<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1" />
+						<link rel="stylesheet" href="pluginAssets/katex/katex.css"><script type="application/javascript" src="pluginAssets/mermaid/mermaid.min.js"></script><script type="application/javascript" src="pluginAssets/mermaid/mermaid_render.js"></script><link rel="stylesheet" href="pluginAssets/highlight.js/atom-one-light.css">
+						<title>程序的控制结构、数据结构之序列、循环语句</title>
+					</head>
+					<body>
+						<div class="exported-note"><div class="exported-note-title">程序的控制结构、数据结构之序列、循环语句</div>
+
+<style>
+		/* https://necolas.github.io/normalize.css/ */
+		html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
+		article,aside,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}
+		pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}
+		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
+
+		body {
+			font-size: 15px;
+			color: #32373F;
+			word-wrap: break-word;
+			line-height: 1.6em;
+			background-color: #ffffff;
+			font-family: 'Avenir', 'Arial', sans-serif;
+			padding-bottom: 0px;
+			padding-top: 0px;
+		}
+		kbd {
+			border: 1px solid rgb(220, 220, 220);
+			box-shadow: inset 0 -1px 0 rgb(220, 220, 220);
+			padding: 2px 4px;
+			border-radius: 3px;
+			background-color: rgb(243, 243, 243);
+		}
+		::-webkit-scrollbar {
+			width: 7px;
+			height: 7px;
+		}
+		::-webkit-scrollbar-corner {
+			background: none;
+		}
+		::-webkit-scrollbar-track {
+			border: none;
+		}
+		::-webkit-scrollbar-thumb {
+			background: rgba(100, 100, 100, 0.3); 
+			border-radius: 5px;
+		}
+		::-webkit-scrollbar-track:hover {
+			background: rgba(0, 0, 0, 0.1); 
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: rgba(100, 100, 100, 0.7); 
+		}
+
+		
+
+		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
+
+		#rendered-md > h1:first-child,
+		#rendered-md > h2:first-child,
+		#rendered-md > h3:first-child,
+		#rendered-md > h4:first-child,
+		#rendered-md > ul:first-child,
+		#rendered-md > ol:first-child,
+		#rendered-md > table:first-child,
+		#rendered-md > blockquote:first-child,
+		#rendered-md > img:first-child,
+		#rendered-md > p:first-child {
+			margin-top: 0;
+			padding-top: 0;
+		}
+		
+		p, h1, h2, h3, h4, h5, h6, ul, table {
+			margin-top: .6em;
+			margin-bottom: 1.35em;
+
+			/*
+				Adds support for RTL text in the note body. It automatically detects the direction using the content.
+				Issue: https://github.com/laurent22/joplin/issues/3991
+			*/
+			unicode-bidi: plaintext;
+		}
+
+		h1, h2, h3, h4, h5, h6, ul, table {
+			margin-bottom: 0.65em;
+		}
+
+		h1, h2, h3, h4, h5, h6 {
+			line-height: 1.5em;
+		}
+		h1 {
+			font-size: 1.5em;
+			font-weight: bold;
+			border-bottom: 1px solid #dddddd;
+			padding-bottom: .3em;
+		}
+		h2 {
+			font-size: 1.3em;
+			font-weight: bold;
+			padding-bottom: .1em; */
+		}
+		h3 {
+			font-size: 1.1em;
+			font-weight: bold;
+		}
+		h4, h5, h6 {
+			font-size: 1em;
+			font-weight: bold;
+		}
+
+		.exported-note-title {
+			font-size: 2em;
+			font-weight: bold;
+			margin-bottom: 0.8em;
+			line-height: 1.5em;
+			padding-bottom: .35em;
+			border-bottom: 1px solid #dddddd;
+		}
+
+		a {
+			color: #155BDA;
+		}
+		ul, ol {
+			padding-left: 0;
+			margin-left: 1.7em;
+		}
+		li {
+			margin-bottom: .4em;
+		}
+		li p {
+			margin-top: 0.2em;
+			margin-bottom: 0;
+		}
+
+		.resource-icon {
+			display: inline-block;
+			position: relative;
+			top: 0.3em;
+			text-decoration: none;
+			width: 1.2em;
+			height: 1.4em;
+			margin-right: 0.4em;
+			background-color:  #155BDA;
+		}
+    /* These icons are obtained from the wonderful ForkAwesome project by copying the src svgs 
+     * into the css classes below.
+     * svgs are obtained from https://github.com/ForkAwesome/Fork-Awesome/tree/master/src/icons/svg
+     * instead of the svg width, height property you must use a viewbox here, 0 0 1536 1792 is typically the actual size of the icon
+     * each line begins with the pre-amble -webkit-mask: url("data:image/svg+xml;utf8,
+     * and of course finishes with ");
+     * to precvent artifacts it is also necessary to include -webkit-mask-repeat: no-repeat;
+     * on the following line
+     * */
+		.fa-joplin {
+			/* Awesome Font file */
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M373.834 128C168.227 128 0 296.223 0 501.834v788.336C0 1495.778 168.227 1664 373.834 1664h788.336c205.608 0 373.83-168.222 373.83-373.83V501.834C1536 296.224 1367.778 128 1162.17 128zm397.222 205.431h417.424a7.132 7.132 0 0 1 7.132 7.133v132.552c0 4.461-3.619 8.073-8.077 8.073h-57.23c-24.168 0-43.768 19.338-44.284 43.374v2.377h-.017v136.191h-.053l-.466 509.375c-5.02 77.667-39.222 149.056-96.324 201.046-60.28 54.834-141.948 85.017-229.962 85.017-12.45 0-25.208-.61-37.907-1.785-92.157-8.682-181.494-48.601-251.662-112.438-71.99-65.517-117.147-150.03-127.164-238-11.226-98.763 23.42-192.783 95.045-257.937 81.99-74.637 198.185-101.768 316.613-75.704 5.574 1.227 9.55 6.282 9.55 11.997v199.52c-.199 2.625-1.481 6.599-8.183 2.896-.663-.365-1.194-.511-1.653-.531-21.987-10.587-45.159-17.57-68.559-19.916-.38-.04-.757-.124-1.138-.163-.537-.048-1.034-.033-1.556-.075-4.13-.354-8.183-.517-12.203-.58-.87-.011-1.771-.127-2.641-.127-.486 0-.951.05-1.437.057-1.464.011-2.886.115-4.33.163-2.76.102-5.497.211-8.182.448-.273.024-.547.07-.835.097-25.509 2.4-47.864 11.104-65.012 25.47-.954.802-1.974 1.53-2.9 2.36a1.34 1.34 0 0 1-.168.146c-23.96 21.8-34.881 53.872-30.726 90.316 4.62 40.737 26.94 81.156 62.841 113.823 35.908 32.67 80.335 52.977 125.113 57.186 35.118 3.36 66.547-3.919 89.899-20.461a97.255 97.255 0 0 0 9.365-7.501c2.925-2.661 5.569-5.5 8.086-8.416.3-.348.672-.673.975-1.024 8.253-9.864 14.222-21.067 17.996-33.148.639-2.034 1.051-4.148 1.564-6.227.381-1.563.81-3.106 1.112-4.693.555-2.784.923-5.632 1.253-8.49.086-.709.183-1.414.237-2.128.492-4.893.693-9.858.55-14.91h.013V521.623c-2.01-22.626-20.78-40.434-43.928-40.434h-57.23a8.071 8.071 0 0 1-8.077-8.073V340.564a7.132 7.132 0 0 1 7.136-7.133z'/></svg>");
+		}
+		.fa-file-image {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-128-448v320H256v-192l192-192 128 128 384-384zm-832-192c-106 0-192-86-192-192s86-192 192-192 192 86 192 192-86 192-192 192z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-pdf {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-514-593c25 20 53 38 84 56 42-5 81-7 117-7 67 0 152 8 177 49 7 10 13 28 2 52-1 1-2 3-3 4v1c-3 18-18 38-71 38-64 0-161-29-245-73-139 15-285 46-392 83-103 176-182 262-242 262-10 0-19-2-28-7l-24-12c-3-1-4-3-6-5-5-5-9-16-6-36 10-46 64-123 188-188 8-5 18-2 23 6 1 1 2 3 2 4 31-51 67-116 107-197 45-90 80-178 104-262-32-109-42-221-24-287 7-25 22-40 42-40h22c15 0 27 5 35 15 12 14 15 36 9 68-1 3-2 6-4 8 1 3 1 5 1 8v30c-1 63-2 123-14 192 35 105 87 190 146 238zm-576 411c30-14 73-57 137-158-75 58-122 124-137 158zm398-920c-10 28-10 76-2 132 3-16 5-31 7-44 2-17 5-31 7-43 1-3 2-5 4-8-1-1-1-3-2-5-1-18-7-29-13-36 0 2-1 3-1 4zm-124 661c88-35 186-63 284-81-10-8-20-15-29-23-49-43-93-103-127-176-19 61-47 126-83 197-15 28-30 56-45 83zm646-16c-5-5-31-24-140-24 49 18 94 28 124 28 9 0 14 0 18-1 0-1-1-2-2-3z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-word {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM233 768v107h70l164 661h159l128-485c5-15 8-30 10-46 1-8 2-16 2-24h4l3 24c3 14 4 30 9 46l128 485h159l164-661h70V768h-300v107h90l-99 438c-4 16-6 33-7 46l-2 21h-4c0-6-2-14-3-21-3-13-5-30-9-46L825 768H711l-144 545c-4 16-5 33-8 46l-4 21h-4l-2-21c-1-13-3-30-7-46l-99-438h90V768H233z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-powerpoint {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-992-234v106h327v-106h-93v-167h137c43 0 82-2 118-15 90-31 146-124 146-233s-54-193-137-228c-38-15-84-19-130-19H416v107h92v555h-92zm353-280H650V882h120c35 0 62 6 83 18 36 21 56 62 56 115 0 56-20 99-62 120-21 10-47 15-78 15z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-excel {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zm-979-234v106h281v-106h-75l103-161c12-19 18-34 21-34h2c1 4 3 7 5 10 4 8 10 14 17 24l107 161h-76v106h291v-106h-68l-192-273 195-282h67V768H828v107h74l-103 159c-12 19-21 34-21 33h-2c-1-4-3-7-5-10-4-7-9-14-17-23L648 875h76V768H434v107h68l189 272-194 283h-68z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-audio {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM620 850c12 5 20 17 20 30v544c0 13-8 25-20 30-4 1-8 2-12 2-8 0-16-3-23-9l-166-167H288c-18 0-32-14-32-32v-192c0-18 14-32 32-32h131l166-167c10-9 23-12 35-7zm417 689c19 0 37-8 50-24 83-102 129-231 129-363s-46-261-129-363c-22-28-63-32-90-10-28 23-32 63-9 91 65 80 100 178 100 282s-35 202-100 282c-23 28-19 68 9 90 12 10 26 15 40 15zm-211-148c17 0 34-7 47-20 56-60 87-137 87-219s-31-159-87-219c-24-26-65-27-91-3-25 24-27 65-2 91 33 36 52 82 52 131s-19 95-52 131c-25 26-23 67 2 91 13 11 29 17 44 17z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-video {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM768 768c70 0 128 58 128 128v384c0 70-58 128-128 128H384c-70 0-128-58-128-128V896c0-70 58-128 128-128h384zm492 2c12 5 20 17 20 30v576c0 13-8 25-20 30-4 1-8 2-12 2-8 0-17-3-23-9l-265-266v-90l265-266c6-6 15-9 23-9 4 0 8 1 12 2z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-archive {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M640 384V256H512v128h128zm128 128V384H640v128h128zM640 640V512H512v128h128zm128 128V640H640v128h128zm700-388c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H768v128H640V128H128v1536h1280zM781 943c85 287 107 349 107 349 5 17 8 34 8 52 0 111-108 192-256 192s-256-81-256-192c0-18 3-35 8-52 0 0 21-62 120-396V768h128v128h79c29 0 54 19 62 47zm-141 465c71 0 128-29 128-64s-57-64-128-64-128 29-128 64 57 64 128 64z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-code {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM480 768c11-14 31-17 45-6l51 38c14 11 17 31 6 45l-182 243 182 243c11 14 8 34-6 45l-51 38c-14 11-34 8-45-6l-226-301c-8-11-8-27 0-38zm802 301c8 11 8 27 0 38l-226 301c-11 14-31 17-45 6l-51-38c-14-11-17-31-6-45l182-243-182-243c-11-14-8-34 6-45l51-38c14-11 34-8 45 6zm-620 461c-18-3-29-20-26-37l138-831c3-18 20-29 37-26l63 10c18 3 29 20 26 37l-138 831c-3 18-20 29-37 26z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file-alt, .fa-file-csv {
+      /* fork-awesome doesn't have csv so we use the text icon */
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280zM384 800c0-18 14-32 32-32h704c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64zm736 224c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64c0-18 14-32 32-32h704zm0 256c18 0 32 14 32 32v64c0 18-14 32-32 32H416c-18 0-32-14-32-32v-64c0-18 14-32 32-32h704z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		.fa-file {
+			-webkit-mask: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1536 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1468 380c37 37 68 111 68 164v1152c0 53-43 96-96 96H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h896c53 0 127 31 164 68zm-444-244v376h376c-6-17-15-34-22-41l-313-313c-7-7-24-16-41-22zm384 1528V640H992c-53 0-96-43-96-96V128H128v1536h1280z'/></svg>");
+      -webkit-mask-repeat: no-repeat;
+		}
+		blockquote {
+			border-left: 4px solid rgb(220, 220, 220);
+			padding-left: 1.2em;
+			margin-left: 0;
+			opacity: 0.7;
+		}
+
+		.jop-tinymce table,
+		table {
+			text-align: left;
+			border-collapse: collapse;
+			border: 1px solid rgb(220, 220, 220);
+			background-color: #ffffff;
+		}
+
+		.jop-tinymce table td, .jop-tinymce table th,
+		table td, th {
+			text-align: left;
+			padding: .5em 1em .5em 1em;
+			font-size: 15;
+			color: #32373F;
+			font-family: 'Avenir', 'Arial', sans-serif;
+		}
+
+		.jop-tinymce table td,
+		table td {
+			border: 1px solid rgb(220, 220, 220);
+		}
+
+		.jop-tinymce table th,
+		table th {
+			border: 1px solid rgb(220, 220, 220);
+			border-bottom: 2px solid rgb(220, 220, 220);
+			background-color: rgb(247, 247, 247);
+		}
+
+		.jop-tinymce table tr:nth-child(even),
+		table tr:nth-child(even) {
+			background-color: rgb(247, 247, 247);
+		}
+
+		.jop-tinymce table tr:hover,
+		table tr:hover {
+			background-color: #e5e5e5;
+		}
+
+		hr {
+			border: none;
+			border-bottom: 2px solid #dddddd;
+		}
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+		
+		.inline-code,
+		.mce-content-body code {
+			border: 1px solid rgb(220, 220, 220);
+			background-color: rgb(243, 243, 243);
+			padding-right: .2em;
+			padding-left: .2em;
+			border-radius: .25em;
+			color: rgb(0,0,0);
+			font-size: .9em;
+		}
+
+		.highlighted-keyword {
+			background-color: #F3B717;
+			color: black;
+		}
+
+		.not-loaded-resource img {
+			width: 1.15em;
+			height: 1.15em;
+			background: white;
+			padding: 2px !important;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px #000000aa;
+		}
+
+		a.not-loaded-resource img {
+			margin-right: .2em;
+		}
+
+		a.not-loaded-resource {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.md-checkbox input[type=checkbox]:checked {
+			opacity: 0.7;
+		}
+
+		.jop-tinymce ul.joplin-checklist .checked,
+		.md-checkbox .checkbox-label-checked {
+			opacity: 0.5;
+		}
+
+		.exported-note {
+			padding: 1em;
+		}
+
+		.joplin-editable .joplin-source {
+			display: none;
+		}
+
+		mark {
+			background: #F7D26E;
+			color: black;
+		}
+
+		/* =============================================== */
+		/* For TinyMCE */
+		/* =============================================== */
+
+		.mce-content-body {
+			/* Note: we give a bit more padding at the bottom, to allow scrolling past the end of the document */
+			padding: 5px 10px 10em 0;
+		}
+
+		/*
+		.mce-content-body code {
+			background-color: transparent;
+		}
+		*/
+
+		.mce-content-body [data-mce-selected=inline-boundary] {
+			background-color: transparent;
+		}
+
+		.mce-content-body .joplin-editable {
+			cursor: pointer !important;
+		}
+
+		.mce-content-body.mce-content-readonly {
+			opacity: 0.5;
+		}
+
+		/* We need that to make sure click events have the A has a target */
+		.katex a span {
+			pointer-events: none;
+		}
+
+		.media-player {
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		.media-player.media-pdf {
+			min-height: 35rem;
+			width: 100%;
+			max-width: 1000px;
+			margin: 0;
+			border: 0;
+			display: block;
+		}
+
+		/* Clear the CODE style if the element is within a joplin-editable block */
+		.mce-content-body .joplin-editable code {
+			border: none;
+			background: none;
+			padding: 0;
+			color: inherit;
+			font-size: inherit;
+		}
+
+		/* To make code blocks horizontally scrollable */
+		/* https://github.com/laurent22/joplin/issues/5740 */
+		pre.hljs {
+			overflow-x: auto;
+		}
+
+		/* =============================================== */
+		/* For TinyMCE */
+		/* =============================================== */
+
+		@media print {
+			body {
+				height: auto !important;
+			}
+
+			pre {
+				white-space: pre-wrap;
+			}
+
+			.code, .inline-code {
+				border: 1px solid #CBCBCB;
+			}
+
+			#joplin-container-content {
+				/* The height of the content is set dynamically by JavaScript (in updateBodyHeight) to go
+				   around various issues related to scrolling. However when printing we don't want this
+				   fixed size as that would crop the content. So we set it to auto here. "important" is
+				   needed to override the style set by JavaScript at the element-level. */
+				height: auto !important;
+			}
+		}
+	
+
+				/*
+					FOR THE MARKDOWN EDITOR
+				*/
+
+				/* Remove the indentation from the checkboxes at the root of the document
+				   (otherwise they are too far right), but keep it for their children to allow
+				   nested lists. Make sure this value matches the UL margin. */
+
+				li.md-checkbox {
+					list-style-type: none;
+				}
+
+				li.md-checkbox input[type=checkbox] {
+					margin-left: -1.71em;
+					margin-right: 0.7em;
+				}
+				
+				ul.joplin-checklist {
+					list-style:none;
+				}
+
+				/*
+					FOR THE RICH TEXT EDITOR
+				*/
+
+				ul.joplin-checklist li::before {
+					content:"\f14a";
+					font-family:"Font Awesome 5 Free";
+					background-size: 16px 16px;
+					pointer-events: all;
+					cursor: pointer;
+					width: 1em;
+					height: 1em;
+					margin-left: -1.3em;
+					position: absolute;
+					color: #32373F;
+				}
+
+				.joplin-checklist li:not(.checked)::before {
+					content:"\f0c8";
+				}
+
+				.fountain {
+					font-family: monospace;
+					line-height: 107%;
+					max-width: 1000px;
+					margin-left: auto;
+					margin-right: auto;
+				}
+
+				.fountain .title-page,
+				.fountain .page { 
+					box-shadow: 0 0 5px rgba(0,0,0,0.1);
+					border: 1px solid #d2d2d2;
+					padding: 10%;
+					margin-bottom: 2em;
+				}
+
+				.fountain h1,
+				.fountain h2,
+				.fountain h3,
+				.fountain h4,
+				.fountain p {
+					font-weight: normal;
+					line-height: 107%;
+					margin: 1em 0;
+					border: none;
+					font-size: 1em;
+				}
+
+				.fountain .bold {
+					font-weight: bold;
+				}
+
+				.fountain .underline {
+					text-decoration: underline;
+				}
+
+				.fountain .centered {
+					text-align: center;
+				}
+
+				.fountain h2 {
+					text-align: right;
+				}
+
+				.fountain .dialogue p.parenthetical {
+					margin-left: 11%;
+				}
+
+				.fountain .title-page .credit,
+				.fountain .title-page .authors,
+				.fountain .title-page .source {
+					text-align: center;
+				}
+
+				.fountain .title-page h1 {
+					margin-bottom: 1.5em;
+					text-align: center;
+				}
+
+				.fountain .title-page .source {
+					margin-top: 1.5em;
+				}
+
+				.fountain .title-page .notes {
+					text-align: right;
+					margin: 3em 0;
+				}
+
+				.fountain .title-page h1 {
+					margin-bottom: 1.5em;
+					text-align: center;
+				}
+
+				.fountain .dialogue {
+					margin-left: 3em;
+					margin-right: 3em;
+				}
+
+				.fountain .dialogue p,
+				.fountain .dialogue h1,
+				.fountain .dialogue h2,
+				.fountain .dialogue h3,
+				.fountain .dialogue h4 {
+					margin: 0;
+				}
+
+				.fountain .dialogue h1,
+				.fountain .dialogue h2,
+				.fountain .dialogue h3,
+				.fountain .dialogue h4 {
+					text-align: center;
+				}
+.mermaid { background-color: white; width: 640px; }</style><div id="rendered-md"><h1 id="选择结构">选择结构</h1>
+<p><strong>缩进</strong>：在 Python 的很多语法中都需要使用缩进，一般情况下，缩进四个字符（按一次Tab）。例如以下所讲的 if 语句，执行语句块都需要缩进。</p>
+<h2 id="单分支选择结构">单分支选择结构</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">if 条件表达式：
+    语句块</pre><pre class="hljs"><code><span class="hljs-keyword">if</span> 条件表达式：
+    语句块</code></pre></div>
+<h2 id="双分支选择结构">双分支选择结构</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">if 条件表达式:
+    语句块 1
+else：
+    语句块 2</pre><pre class="hljs"><code><span class="hljs-keyword">if</span> 条件表达式:
+    语句块 <span class="hljs-number">1</span>
+<span class="hljs-keyword">else</span>：
+    语句块 <span class="hljs-number">2</span></code></pre></div>
+<p>当条件表达式的值为 True 时，执行语句块 1，否则执行语句块 2。</p>
+<center class="jop-noMdConv"><img src="../_resources/83ff1b07a80943f39aefcdc054efb15c.png" alt="9569ce007d4587cbdd81a6db22c7a980.png" width="299" height="321" class="jop-noMdConv"/></center>
+<h2 id="多分支选择结构">多分支选择结构：</h2>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">if 条件:
+    条件满足时，执行语句……
+elif 条件:
+    条件满足时，执行语句……
+else:
+    以上条件都不满足时，执行语句……</pre><pre class="hljs"><code><span class="hljs-keyword">if</span> 条件:
+    条件满足时，执行语句……
+<span class="hljs-keyword">elif</span> 条件:
+    条件满足时，执行语句……
+<span class="hljs-keyword">else</span>:
+    以上条件都不满足时，执行语句……</code></pre></div>
+<p>（elif 可以写多个）</p>
+<p>举例说明：期末考试结束，学校要对每个分数段的学生进行评级。分数 60 分以下为不及格，大于等于 60 分为及格，其中如果分数大于等于 80 分并且小于 90 分为良好，大于等于 90 分为优秀。</p>
+<h3 id="第一种方法多分支选择结构">第一种方法：多分支选择结构</h3>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">score = int(input('请输入分数:'))
+if 60&lt;=score&lt;80:
+print('及格')
+elif 80&lt;=score&lt;90:
+print('良好')
+elif score&gt;=90:
+print('优秀')
+else:
+print('不及格')</pre><pre class="hljs"><code>score = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>(<span class="hljs-string">&#x27;请输入分数:&#x27;</span>))
+<span class="hljs-keyword">if</span> <span class="hljs-number">60</span>&lt;=score&lt;<span class="hljs-number">80</span>:
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;及格&#x27;</span>)
+<span class="hljs-keyword">elif</span> <span class="hljs-number">80</span>&lt;=score&lt;<span class="hljs-number">90</span>:
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;良好&#x27;</span>)
+<span class="hljs-keyword">elif</span> score&gt;=<span class="hljs-number">90</span>:
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;优秀&#x27;</span>)
+<span class="hljs-keyword">else</span>:
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;不及格&#x27;</span>)</code></pre></div>
+<h3 id="第二种方法if-嵌套">第二种方法：if 嵌套</h3>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">score = int(input('请输入分数：'))
+if score&gt;=60:
+    if 80&lt;=score&lt;90:
+    print('良好')
+    elif score&gt;=90:
+    print('优秀')
+    else:
+    print('及格')
+else:
+print('不及格')</pre><pre class="hljs"><code>score = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>(<span class="hljs-string">&#x27;请输入分数：&#x27;</span>))
+<span class="hljs-keyword">if</span> score&gt;=<span class="hljs-number">60</span>:
+    <span class="hljs-keyword">if</span> <span class="hljs-number">80</span>&lt;=score&lt;<span class="hljs-number">90</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;良好&#x27;</span>)
+    <span class="hljs-keyword">elif</span> score&gt;=<span class="hljs-number">90</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;优秀&#x27;</span>)
+    <span class="hljs-keyword">else</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;及格&#x27;</span>)
+<span class="hljs-keyword">else</span>:
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;不及格&#x27;</span>)</code></pre></div>
+<h1 id="数据结构之序列">数据结构之序列</h1>
+<p>数据结构是以某种方式（如通过编号）组合起来的数据元素（如数、字符乃至其他数据结构）集合。在 Python 中，最基本的数据结构为序列。
+常见序列类型包括<strong>字符串</strong>(普通字符串和 unicode 字符串),<strong>列表</strong>和<strong>元组</strong>. 所谓序列,即成员有序排列,可通过下标访问。\</p>
+<h2 id="python-序列通用操作">Python 序列通用操作：</h2>
+<ul>
+<li>索引： 序列中的元素都是有序的、拥有自己编号(从 0 开始),我们可以通过索引得 到序列中对应的元素。
+索引也可以为负值,负数索引表示从右往左开始计数，最后一个元素索引为 -1,倒数第二为-2,以此类推。</li>
+<li>切片(分片)： 使用索引可以获取单个元素，使用分片可以获取序列中指定范围内的元素。 切片操作符<code class="inline-code">[:]</code>，切片中冒号左边索引对应的元素晚于右边索引对应元素出现时, 返回结果是<code class="inline-code">[]</code>。</li>
+<li><code class="inline-code">+</code>：连接序列(两种相同的序列)</li>
+<li><code class="inline-code">*</code>：重复序列元素</li>
+<li>成员资格:<code class="inline-code">in</code></li>
+<li>最大值：<code class="inline-code">max()</code></li>
+<li>最小值：<code class="inline-code">min()</code></li>
+<li>长度：<code class="inline-code">len()</code></li>
+</ul>
+<h2 id="列表list">列表(list)</h2>
+<p>列表是Python 中最基本的数据结构，也是最常使用的数据结构。 它是可变的，包括长度和元素都可以变换，也就是初始化后还可以对里面的元素进行更改，里面元素可以放任意类型数据，列表使用方括号。</p>
+<h3 id="1初始化列表">1.初始化列表：</h3>
+<p>(1) lq_lst = list() 初始化空列表
+(2) lq_lst = [] 初始化空列表
+(3) lq_lst = [1,2,3] 初始化非空列表
+(4) 使用 range 函数初始化非空列表：\</p>
+<ul>
+<li>range(start,stop,step): start:计数从 start 开始。默认是 0，例如 range(5)等价于 range(0,5)
+stop:计数到 stop 结束，但不包括 stop。例如 range(0,5)是[0,1,2,3,4]没有 5。
+step：步长，默认为 1。</li>
+<li>例如 lq_lst = list(range(1,10,1))，列表中元素为[1,2,3,4,5,6,7,8,9]</li>
+<li>倒序 lq_lst = list(range(10,1,-2)),列表中元素为[10,8,6,4,2]</li>
+</ul>
+<h3 id="2更新列表中的元素">2.更新列表中的元素</h3>
+<p>将对应列表中的索引重新赋值即可。例如 lq_lst[0] = ‘123’，现在 lq_lst 中的元素为[‘123’,1,2019,‘sight’]。</p>
+<h3 id="3删除列表元素del">3.删除列表元素：del。</h3>
+<p>输入指令 del lq_lst[1]，lq_lst 中索引位置为 1 的元素将会被删除。
+举例：</p>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">&gt;&gt;&gt; a = [-1, 1, 66.25, 333, 333, 1234.5]
+&gt;&gt;&gt; del a[0]
+&gt;&gt;&gt; a
+[1, 66.25, 333, 333, 1234.5]
+&gt;&gt;&gt; del a[2:4]
+&gt;&gt;&gt; a
+[1, 66.25, 1234.5]
+&gt;&gt;&gt; del a[:]
+&gt;&gt;&gt; a
+[]</pre><pre class="hljs"><code><span class="hljs-meta">&gt;&gt;&gt; </span>a = [-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">66.25</span>, <span class="hljs-number">333</span>, <span class="hljs-number">333</span>, <span class="hljs-number">1234.5</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">del</span> a[<span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+[<span class="hljs-number">1</span>, <span class="hljs-number">66.25</span>, <span class="hljs-number">333</span>, <span class="hljs-number">333</span>, <span class="hljs-number">1234.5</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">del</span> a[<span class="hljs-number">2</span>:<span class="hljs-number">4</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+[<span class="hljs-number">1</span>, <span class="hljs-number">66.25</span>, <span class="hljs-number">1234.5</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">del</span> a[:]
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+[]</code></pre></div>
+<h3 id="4列表函数操作">4.列表函数操作：</h3>
+<table>
+<thead>
+<tr>
+<th><center class="jop-noMdConv">方法</center></th>
+<th><center class="jop-noMdConv">描述</center></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><center class="jop-noMdConv">list.append()</center></td>
+<td><center class="jop-noMdConv">在列表末尾添加新的对象</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.count()</center></td>
+<td><center class="jop-noMdConv">统计某个元素在列表中出现的次数</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.index()</center></td>
+<td><center class="jop-noMdConv">从列表中找出某个元素第一个匹配值的索引位置，索引从0开始</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.remove()</center></td>
+<td><center class="jop-noMdConv">移除列表中某个值的第一个匹配项</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.reverse()</center></td>
+<td><center class="jop-noMdConv">反向列表中的元素，倒转</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.sort([func])</center></td>
+<td><center class="jop-noMdConv">对原列表按照设定的排序方法进行排序，默认从小到大排序</center></td>
+</tr>
+<tr>
+<td><center class="jop-noMdConv">list.insert(index,obj)</center></td>
+<td><center class="jop-noMdConv">将对象插入指定索引位置的列表</center></td>
+</tr>
+</tbody>
+</table>
+<h2 id="元组tuple">元组(tuple)</h2>
+<p>元组是不可变数据类型，元组使用小括号。\</p>
+<h3 id="创建元组">创建元组：</h3>
+<p>创建空元组：tup1 = ()
+元组中只包含一个元素时，需要在元素后面添加逗号<code class="inline-code">,</code>。
+t = (5)这样定义的不是元组，而是一个数值
+t = (5,)这样才是定义的元组
+元组只能创建和读取，无法修改和删除</p>
+<h3 id="访问元组">访问元组</h3>
+<p>可以使用下标索引来访问元组中的值,也可以截取索引中的一段元素，例如：</p>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">tup1 = ('Hello', 'Hi', 1997, 2000)
+tup2 = (1, 2, 3, 4, 5, 6, 7 )
+ 
+print (&quot;tup1[0]: &quot;, tup1[0])
+print (&quot;tup2[1:5]: &quot;, tup2[1:5])</pre><pre class="hljs"><code>tup1 = (<span class="hljs-string">&#x27;Hello&#x27;</span>, <span class="hljs-string">&#x27;Hi&#x27;</span>, <span class="hljs-number">1997</span>, <span class="hljs-number">2000</span>)
+tup2 = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span> )
+ 
+<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;tup1[0]: &quot;</span>, tup1[<span class="hljs-number">0</span>])
+<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;tup2[1:5]: &quot;</span>, tup2[<span class="hljs-number">1</span>:<span class="hljs-number">5</span>])</code></pre></div>
+<p>输出结果：</p>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="" data-joplin-source-open="```&#10;" data-joplin-source-close="&#10;```">tup1[0]:  Hello
+tup2[1:5]:  (2, 3, 4, 5)</pre><pre class="hljs"><code><span class="hljs-attribute">tup1</span>[<span class="hljs-number">0</span>]:  Hello
+<span class="hljs-attribute">tup2</span>[<span class="hljs-number">1</span>:<span class="hljs-number">5</span>]:  (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)</code></pre></div>
+<h2 id="字符串操作">字符串操作</h2>
+<p>split() 通过指定分隔符对字符串进行切片，如果第二个参数 num 有指定值，则分割为 num+1 个子字符串。
+split() 方法语法：</p>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="txt" data-joplin-source-open="```txt&#10;" data-joplin-source-close="&#10;```">str.split(str=&quot;&quot;, num=string.count(str))</pre><pre class="hljs"><code>str.split(str=&quot;&quot;, num=string.count(str))</code></pre></div>
+<p>参数：</p>
+<ul>
+<li>str – 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。</li>
+<li>num – 分割次数。默认为 -1, 即分隔所有。 举例：</li>
+</ul>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">str = &quot;this is string example....wow!!!&quot;
+print (str.split())       # 默认情况
+print (str.split('i',1))   # 以 i 为分隔符，分割1次
+print (str.split('w'))     # 以 w 为分隔符</pre><pre class="hljs"><code><span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;this is string example....wow!!!&quot;</span>
+<span class="hljs-built_in">print</span> (<span class="hljs-built_in">str</span>.split())       <span class="hljs-comment"># 默认情况</span>
+<span class="hljs-built_in">print</span> (<span class="hljs-built_in">str</span>.split(<span class="hljs-string">&#x27;i&#x27;</span>,<span class="hljs-number">1</span>))   <span class="hljs-comment"># 以 i 为分隔符，分割1次</span>
+<span class="hljs-built_in">print</span> (<span class="hljs-built_in">str</span>.split(<span class="hljs-string">&#x27;w&#x27;</span>))     <span class="hljs-comment"># 以 w 为分隔符</span></code></pre></div>
+<p>输出结果如下：</p>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">['this', 'is', 'string', 'example....wow!!!']
+['th', 's is string example....wow!!!']
+['this is string example....', 'o', '!!!']</pre><pre class="hljs"><code>[<span class="hljs-string">&#x27;this&#x27;</span>, <span class="hljs-string">&#x27;is&#x27;</span>, <span class="hljs-string">&#x27;string&#x27;</span>, <span class="hljs-string">&#x27;example....wow!!!&#x27;</span>]
+[<span class="hljs-string">&#x27;th&#x27;</span>, <span class="hljs-string">&#x27;s is string example....wow!!!&#x27;</span>]
+[<span class="hljs-string">&#x27;this is string example....&#x27;</span>, <span class="hljs-string">&#x27;o&#x27;</span>, <span class="hljs-string">&#x27;!!!&#x27;</span>]</code></pre></div>
+<h1 id="循环语句">循环语句</h1>
+<h2 id="for-循环">for 循环</h2>
+<ul>
+<li>for 循环又称之为计数循环，Python 中的 for 语句与其他高级程序语言有很 大的不同，其他高级语言 for 语句要用循环控制变量来控制循环。Python 中 for 语句是通过循环遍历某一序列对象来构建循环，循环结束的条件就是对 象被遍历完成。</li>
+<li>for 语句的形式如下：</li>
+</ul>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">for 循环变量 in 遍历对象:
+    循环体</pre><pre class="hljs"><code><span class="hljs-keyword">for</span> 循环变量 <span class="hljs-keyword">in</span> 遍历对象:
+    循环体</code></pre></div>
+<p>for 语句的语义是遍历 for 语句中的遍历对象，每次循环，循环变量会得到 遍历对象中的一个值，你可以在循环体中对它进行处理；一般情况下，当遍历对 象中的值全部用完时，就会自动退出循环。</p>
+<ul>
+<li>for 语句与 range()函数： for 语句中的对象可以是列表、字典以及元组等，也可以通过 range()函数产 生一个整数列表，以完成计数循环。</li>
+</ul>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">&gt;&gt;&gt;languages = [&quot;C&quot;, &quot;C++&quot;, &quot;Perl&quot;, &quot;Python&quot;] 
+&gt;&gt;&gt; for x in languages:
+...     print (x)
+... 
+C
+C++
+Perl
+Python
+&gt;&gt;&gt;</pre><pre class="hljs"><code>&gt;&gt;&gt;languages = [<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&quot;C++&quot;</span>, <span class="hljs-string">&quot;Perl&quot;</span>, <span class="hljs-string">&quot;Python&quot;</span>] 
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> languages:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span> (x)
+<span class="hljs-meta">... </span>
+C
+C++
+Perl
+Python
+&gt;&gt;&gt;</code></pre></div>
+<h1 id="while-循环">while 循环</h1>
+<ul>
+<li>while 循环也称之为条件循环，其基本语法为：</li>
+</ul>
+<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="python" data-joplin-source-open="```python&#10;" data-joplin-source-close="&#10;```">while 条件表达式：
+    循环体</pre><pre class="hljs"><code><span class="hljs-keyword">while</span> 条件表达式：
+    循环体</code></pre></div>
+<p>循环体即需要重复执行的代码，循环体之前需要四个空格(一个Tab）缩进。
+流程图：</p>
+<center class="jop-noMdConv"><img src="../_resources/5b9c8b18b48e44099635c386d481bd08.png" alt="98e07be426330e1d6c411785a9dcf999.png" width="299" height="321" class="jop-noMdConv"/></center>
+<p>当条件表达式结果为 True 时，循环体执行，执行完之后继续进行条件判断， 如果条件为假，则执行 False 路线语句，否则继续按照 True 路线运行程序，如此反复， 直到条件为假。在 while 语句的循环体中一定要包含改变测试条件的语句，以保证循环能够结束，以避免死循环的出现。</p>
+</div></div>
+					</body>
+				</html>
+			
