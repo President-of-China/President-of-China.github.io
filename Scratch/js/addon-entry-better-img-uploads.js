@@ -73,11 +73,12 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    console,
+    msg
+  } = _ref;
   let mode = addon.settings.get("fitting");
   addon.settings.addEventListener("change", () => {
     mode = addon.settings.get("fitting");
@@ -270,7 +271,8 @@ const _twGetAsset = path => {
     el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
 
-  function FileList(arr = []) {
+  function FileList() {
+    let arr = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     //File list constructor. Does not need the `new` keyword, but it is easier to read
     let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
 

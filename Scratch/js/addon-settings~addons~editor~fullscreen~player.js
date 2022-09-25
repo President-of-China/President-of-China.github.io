@@ -3299,7 +3299,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! exports provided: commit, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"commit\":\"684f0f2\"}");
+module.exports = JSON.parse("{\"commit\":\"007cacd\"}");
 
 /***/ }),
 
@@ -3340,9 +3340,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _generated_upstream_meta_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./generated/upstream-meta.json */ "./src/addons/generated/upstream-meta.json");
 var _generated_upstream_meta_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! ./generated/upstream-meta.json */ "./src/addons/generated/upstream-meta.json", 1);
 /* harmony import */ var _event_target__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./event-target */ "./src/addons/event-target.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -3725,9 +3725,10 @@ class SettingsStore extends _event_target__WEBPACK_IMPORTED_MODULE_2__["default"
     }
   }
 
-  export({
-    theme
-  }) {
+  export(_ref) {
+    let {
+      theme
+    } = _ref;
     const result = {
       core: {
         // Upstream property. We don't use this.
@@ -3783,10 +3784,12 @@ class SettingsStore extends _event_target__WEBPACK_IMPORTED_MODULE_2__["default"
     }
   }
 
-  setStoreWithVersionCheck({
-    version,
-    store
-  }) {
+  setStoreWithVersionCheck(_ref2) {
+    let {
+      version,
+      store
+    } = _ref2;
+
     if (version !== _generated_upstream_meta_json__WEBPACK_IMPORTED_MODULE_1__.commit) {
       return;
     }

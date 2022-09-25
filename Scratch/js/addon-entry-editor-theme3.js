@@ -215,11 +215,12 @@ function updateSettings(addon, newStyle) {
   newStyle.textContent = stylesheet;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   const otherStyle = document.querySelector("[data-addon-id='".concat(addon.self.id, "']"));
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);
@@ -279,11 +280,12 @@ function convertToHex(obj) {
   return "#".concat(r).concat(g).concat(b).concat(a);
 }
 
-function convertFromHsv({
-  h,
-  s,
-  v
-}) {
+function convertFromHsv(_ref) {
+  let {
+    h,
+    s,
+    v
+  } = _ref;
   if (s === 0) return {
     r: 255 * v,
     g: 255 * v,
@@ -348,11 +350,12 @@ function convertFromHsv({
   }
 }
 
-function convertToHsv({
-  r,
-  g,
-  b
-}) {
+function convertToHsv(_ref2) {
+  let {
+    r,
+    g,
+    b
+  } = _ref2;
   r /= 255;
   g /= 255;
   b /= 255;

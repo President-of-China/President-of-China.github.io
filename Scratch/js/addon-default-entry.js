@@ -239,15 +239,17 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async ({
-  addon,
-  console
-}) => {
+/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
+  let {
+    addon,
+    console
+  } = _ref;
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", ({
-    detail
-  }) => {
+  addon.tab.redux.addEventListener("statechanged", _ref2 => {
+    let {
+      detail
+    } = _ref2;
     if (addon.self.disabled) return;
     const e = detail;
     if (!e.action || e.action.type !== "scratch-paint/clipboard/SET") return;
@@ -291,49 +293,24 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
-  let ctrlKeyPressed = false;
-  document.addEventListener("mousedown", function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  }, {
-    capture: true
-  }); // https://github.com/LLK/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454
+/* harmony import */ var _block_duplicate_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../block-duplicate/module.js */ "./src/addons/addons/block-duplicate/module.js");
 
-  const originalStartDraggingBlock = ScratchBlocks.Gesture.prototype.startDraggingBlock_;
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
 
-  ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function (...args) {
-    if (!addon.self.disabled) {
-      // Scratch uses fake mouse events to implement right click > duplicate
-      // This has no connection to the block-duplicate addon.
-      const isDuplicate = !(this.mostRecentEvent_ instanceof MouseEvent);
-      const block = this.targetBlock_;
-      const invert = addon.settings.get("invertDrag") && !isDuplicate && block.getParent();
-      const isShadow = block.isShadow();
-
-      if (ctrlKeyPressed === !invert && !isShadow) {
-        if (!ScratchBlocks.Events.getGroup()) {
-          ScratchBlocks.Events.setGroup(true);
-        }
-
-        if (isDuplicate) {
-          const nextBlock = block.getNextBlock();
-
-          if (nextBlock) {
-            nextBlock.dispose();
-          }
-        }
-
-        block.unplug(true);
-      }
-    }
-
-    return originalStartDraggingBlock.call(this, ...args);
+  const update = () => {
+    _block_duplicate_module_js__WEBPACK_IMPORTED_MODULE_0__["setCherryPicking"](!addon.self.disabled, addon.settings.get("invertDrag"));
   };
+
+  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("reenabled", update);
+  addon.settings.addEventListener("change", update);
+  update();
+  _block_duplicate_module_js__WEBPACK_IMPORTED_MODULE_0__["load"](addon);
 });
 
 /***/ }),
@@ -357,6 +334,114 @@ const resources = {
 
 /***/ }),
 
+/***/ "./src/addons/addons/block-duplicate/module.js":
+/*!*****************************************************!*\
+  !*** ./src/addons/addons/block-duplicate/module.js ***!
+  \*****************************************************/
+/*! exports provided: setCherryPicking, setDuplication, load */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setCherryPicking", function() { return setCherryPicking; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setDuplication", function() { return setDuplication; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
+let enableCherryPicking = false;
+let invertCherryPicking = false;
+function setCherryPicking(newEnabled, newInverted) {
+  enableCherryPicking = newEnabled;
+  invertCherryPicking = newInverted;
+}
+let enableDuplication = false;
+function setDuplication(newEnabled) {
+  enableDuplication = newEnabled;
+} // mostRecentEvent_ is sometimes a fake event, so we can't rely on reading its properties.
+
+let ctrlOrMetaPressed = false;
+let altPressed = false;
+document.addEventListener("mousedown", function (e) {
+  ctrlOrMetaPressed = e.ctrlKey || e.metaKey;
+  altPressed = e.altKey;
+}, {
+  capture: true
+});
+let loaded = false;
+async function load(addon) {
+  if (loaded) {
+    return;
+  }
+
+  loaded = true;
+  const ScratchBlocks = await addon.tab.traps.getBlockly(); // https://github.com/LLK/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454
+
+  const originalStartDraggingBlock = ScratchBlocks.Gesture.prototype.startDraggingBlock_;
+
+  ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function () {
+    let block = this.targetBlock_; // Scratch uses fake mouse events to implement right click > duplicate
+
+    const isRightClickDuplicate = !(this.mostRecentEvent_ instanceof MouseEvent);
+    const isDuplicating = enableDuplication && altPressed && !isRightClickDuplicate && !this.flyout_ && !this.shouldDuplicateOnDrag_ && this.targetBlock_.type !== "procedures_definition";
+    const isCherryPickingInverted = invertCherryPicking && !isRightClickDuplicate && block.getParent();
+    const isCherryPicking = isDuplicating ? ctrlOrMetaPressed : enableCherryPicking && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
+
+    if (isDuplicating || isCherryPicking) {
+      if (!ScratchBlocks.Events.getGroup()) {
+        // Scratch will disable grouping on its own later.
+        ScratchBlocks.Events.setGroup(true);
+      }
+    }
+
+    if (isDuplicating) {
+      // Based on https://github.com/LLK/scratch-blocks/blob/feda366947432b9d82a4f212f43ff6d4ab6f252f/core/scratch_blocks_utils.js#L171
+      // Setting this.shouldDuplicateOnDrag_ = true does NOT work because it doesn't call changeObscuredShadowIds
+      this.startWorkspace_.setResizesEnabled(false);
+      ScratchBlocks.Events.disable();
+      let newBlock;
+
+      try {
+        const xmlBlock = ScratchBlocks.Xml.blockToDom(block);
+        newBlock = ScratchBlocks.Xml.domToBlock(xmlBlock, this.startWorkspace_);
+        ScratchBlocks.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
+        const xy = block.getRelativeToSurfaceXY();
+        newBlock.moveBy(xy.x, xy.y);
+      } catch (e) {
+        console.error(e);
+      }
+
+      ScratchBlocks.Events.enable();
+
+      if (newBlock) {
+        block = newBlock;
+        this.targetBlock_ = newBlock;
+
+        if (ScratchBlocks.Events.isEnabled()) {
+          ScratchBlocks.Events.fire(new ScratchBlocks.Events.BlockCreate(newBlock));
+        }
+      }
+    }
+
+    if (isCherryPicking) {
+      if (isRightClickDuplicate || isDuplicating) {
+        const nextBlock = block.getNextBlock();
+
+        if (nextBlock) {
+          nextBlock.dispose();
+        }
+      }
+
+      block.unplug(true);
+    }
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return originalStartDraggingBlock.call(this, ...args);
+  };
+}
+
+/***/ }),
+
 /***/ "./src/addons/addons/block-duplicate/userscript.js":
 /*!*********************************************************!*\
   !*** ./src/addons/addons/block-duplicate/userscript.js ***!
@@ -366,58 +451,23 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
-  const originalStartDraggingBlock = ScratchBlocks.Gesture.prototype.startDraggingBlock_; // https://github.com/LLK/scratch-blocks/blob/e86f115457006d1cde83baa23eaaf1ee16d315f5/core/gesture.js#L454
+/* harmony import */ var _module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./module.js */ "./src/addons/addons/block-duplicate/module.js");
 
-  ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function (...args) {
-    if (!this.flyout_ && !this.shouldDuplicateOnDrag_ && this.targetBlock_.type !== "procedures_definition" && this.mostRecentEvent_.altKey && !addon.self.disabled) {
-      // Scratch will reset these when the drag ends
-      if (!ScratchBlocks.Events.getGroup()) {
-        ScratchBlocks.Events.setGroup(true);
-      }
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
 
-      this.startWorkspace_.setResizesEnabled(false); // Based on https://github.com/LLK/scratch-blocks/blob/feda366947432b9d82a4f212f43ff6d4ab6f252f/core/scratch_blocks_utils.js#L171
-      // Setting this.shouldDuplicateOnDrag_ = true does NOT work because it doesn't call changeObscuredShadowIds
-
-      ScratchBlocks.Events.disable();
-      let newBlock;
-
-      try {
-        const xmlBlock = ScratchBlocks.Xml.blockToDom(this.targetBlock_);
-        newBlock = ScratchBlocks.Xml.domToBlock(xmlBlock, this.startWorkspace_);
-        ScratchBlocks.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
-        const xy = this.targetBlock_.getRelativeToSurfaceXY();
-        newBlock.moveBy(xy.x, xy.y);
-
-        if (this.mostRecentEvent_.ctrlKey || this.mostRecentEvent_.metaKey) {
-          const nextBlock = newBlock.getNextBlock();
-
-          if (nextBlock) {
-            nextBlock.dispose();
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      ScratchBlocks.Events.enable();
-
-      if (newBlock) {
-        this.targetBlock_ = newBlock;
-
-        if (ScratchBlocks.Events.isEnabled()) {
-          ScratchBlocks.Events.fire(new ScratchBlocks.Events.BlockCreate(newBlock));
-        }
-      }
-    }
-
-    return originalStartDraggingBlock.call(this, ...args);
+  const update = () => {
+    _module_js__WEBPACK_IMPORTED_MODULE_0__["setDuplication"](!addon.self.disabled);
   };
+
+  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("reenabled", update);
+  update();
+  _module_js__WEBPACK_IMPORTED_MODULE_0__["load"](addon);
 });
 
 /***/ }),
@@ -754,12 +804,13 @@ const blockToDomWithXY = block => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _blockToDom_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./blockToDom.js */ "./src/addons/addons/block-switching/blockToDom.js");
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
   let blockSwitches = {};
@@ -1434,11 +1485,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (async ({
-  addon,
-  console,
-  msg
-}) => {
+/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
+  let {
+    addon,
+    console,
+    msg
+  } = _ref;
   // 250-ms rate limit
   const rateLimiter = new _libraries_common_cs_rate_limiter_js__WEBPACK_IMPORTED_MODULE_1__["default"](250);
 
@@ -1461,9 +1513,10 @@ __webpack_require__.r(__webpack_exports__);
     if (!addon.tab.redux.state || !addon.tab.redux.state.scratchGui) return; // The only way to reliably set color is to invoke eye dropper via click()
     // then faking that the eye dropper reported the value.
 
-    const onEyeDropperClosed = ({
-      detail
-    }) => {
+    const onEyeDropperClosed = _ref2 => {
+      let {
+        detail
+      } = _ref2;
       if (detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperClosed);
       setTimeout(() => {
@@ -1471,9 +1524,10 @@ __webpack_require__.r(__webpack_exports__);
       }, 50);
     };
 
-    const onEyeDropperOpened = ({
-      detail
-    }) => {
+    const onEyeDropperOpened = _ref3 => {
+      let {
+        detail
+      } = _ref3;
       if (detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
       addon.tab.redux.addEventListener("statechanged", onEyeDropperClosed);
@@ -1531,7 +1585,11 @@ __webpack_require__.r(__webpack_exports__);
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalShowEditor = ScratchBlocks.FieldColourSlider.prototype.showEditor_;
 
-  ScratchBlocks.FieldColourSlider.prototype.showEditor_ = function (...args) {
+  ScratchBlocks.FieldColourSlider.prototype.showEditor_ = function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     const r = originalShowEditor.call(this, ...args);
     addColorPicker();
     return r;
@@ -1589,11 +1647,12 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   const vm = addon.tab.traps.vm;
 
   const updateStyles = () => {
@@ -2746,6 +2805,8 @@ class DevTools {
   }
 
   buildNavigationCarousel(nav, li, blocks, instanceBlock) {
+    var _this = this;
+
     if (nav && nav.parentNode === li) {
       // Same control... click again to go to next
       this.multi.navRight();
@@ -2755,8 +2816,12 @@ class DevTools {
       }
 
       li.insertAdjacentHTML("beforeend", "\n                    <span id=\"s3devMulti\" class=\"s3devMulti\">\n                        <span id=\"s3devMultiLeft\" class=\"s3devNav\">\u25C0</span><span id=\"s3devMultiCount\"></span><span id=\"s3devMultiRight\" class=\"s3devNav\">\u25B6</span>\n                    </span>\n                ");
-      document.getElementById("s3devMultiLeft").addEventListener("mousedown", (...e) => this.multi.navLeft(...e));
-      document.getElementById("s3devMultiRight").addEventListener("mousedown", (...e) => this.multi.navRight(...e));
+      document.getElementById("s3devMultiLeft").addEventListener("mousedown", function () {
+        return _this.multi.navLeft(...arguments);
+      });
+      document.getElementById("s3devMultiRight").addEventListener("mousedown", function () {
+        return _this.multi.navRight(...arguments);
+      });
       this.multi.idx = 0;
 
       if (instanceBlock) {
@@ -3447,7 +3512,8 @@ class DevTools {
     }
 
     if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
-      if (!e.shiftKey || !document.getElementsByClassName("injectionDiv")[0].contains(e.target) && // Focused inputs are not part of the injectionDiv, but to the user they are part of the code area so make multi-inject work there
+      if (!e.shiftKey || // Clicking on the code area should always make multi-inject work
+      !document.getElementsByClassName("injectionDiv")[0].contains(e.target) && // Focused inputs are not part of the injectionDiv, but to the user they are part of the code area so make multi-inject work there
       !e.target.classList.contains("blocklyHtmlInput") || // This selector targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly trigger a popup window so always close the dropdown
       e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")) {
         // If we click outside the dropdown, then instigate the hide code...
@@ -3539,6 +3605,8 @@ class DevTools {
   }
 
   middleClickWorkspace(e) {
+    var _this2 = this;
+
     if (!this.isScriptEditor()) {
       return;
     } // todo: if (!this.addon.settings.get("enableBlockInjector")) {
@@ -3566,10 +3634,18 @@ class DevTools {
 
     this.buildFloatingFilterList(e, floatBar);
     const ddOut = document.getElementById("s3devIDDOut");
-    ddOut.addEventListener("mousedown", (...e) => this.dropDownFloatClick(...e));
-    this.floatInp.addEventListener("keyup", (...e) => this.floatInputChange(...e));
-    this.floatInp.addEventListener("focus", (...e) => this.floatInputChange(...e));
-    this.floatInp.addEventListener("keydown", (...e) => this.floatInputKeyDown(...e));
+    ddOut.addEventListener("mousedown", function () {
+      return _this2.dropDownFloatClick(...arguments);
+    });
+    this.floatInp.addEventListener("keyup", function () {
+      return _this2.floatInputChange(...arguments);
+    });
+    this.floatInp.addEventListener("focus", function () {
+      return _this2.floatInputChange(...arguments);
+    });
+    this.floatInp.addEventListener("keydown", function () {
+      return _this2.floatInputKeyDown(...arguments);
+    });
   }
 
   middleClick(e) {
@@ -4075,6 +4151,8 @@ class DevTools {
   }
 
   initInner(root) {
+    var _this3 = this;
+
     let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
@@ -4094,21 +4172,39 @@ class DevTools {
       this.find = document.getElementById("s3devFind");
       this.findInp = document.getElementById("s3devInp");
       this.ddOut = document.getElementById("s3devDDOut");
-      this.domHelpers.bindOnce(this.ddOut, "mousedown", (...e) => this.dropDownClick(...e), undefined);
+      this.domHelpers.bindOnce(this.ddOut, "mousedown", function () {
+        return _this3.dropDownClick(...arguments);
+      }, undefined);
       this.dd = document.getElementById("s3devDD"); // bindOnce(find, 'mouseenter', showDropDown);
       // bindOnce(find, 'mouseleave', hideDropDown);
 
-      this.domHelpers.bindOnce(this.findInp, "keyup", (...e) => this.inputChange(...e), undefined);
-      this.domHelpers.bindOnce(this.findInp, "keydown", (...e) => this.inputKeyDown(...e), undefined);
-      this.domHelpers.bindOnce(this.findInp, "focus", (...e) => this.inputChange(...e), undefined);
-      this.domHelpers.bindOnce(document.getElementById("s3devHelp"), "click", (...e) => this.eventClickHelp(...e), undefined);
-      this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
+      this.domHelpers.bindOnce(this.findInp, "keyup", function () {
+        return _this3.inputChange(...arguments);
+      }, undefined);
+      this.domHelpers.bindOnce(this.findInp, "keydown", function () {
+        return _this3.inputKeyDown(...arguments);
+      }, undefined);
+      this.domHelpers.bindOnce(this.findInp, "focus", function () {
+        return _this3.inputChange(...arguments);
+      }, undefined);
+      this.domHelpers.bindOnce(document.getElementById("s3devHelp"), "click", function () {
+        return _this3.eventClickHelp(...arguments);
+      }, undefined);
+      this.domHelpers.bindOnce(document, "keydown", function () {
+        return _this3.eventKeyDown(...arguments);
+      }, true);
     }
 
-    this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
-    this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
+    this.domHelpers.bindOnce(document, "mousemove", function () {
+      return _this3.eventMouseMove(...arguments);
+    }, true);
+    this.domHelpers.bindOnce(document, "mousedown", function () {
+      return _this3.eventMouseDown(...arguments);
+    }, true); // true to capture all mouse downs 'before' the dom events handle them
 
-    this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
+    this.domHelpers.bindOnce(document, "mouseup", function () {
+      return _this3.eventMouseUp(...arguments);
+    }, true);
   }
 
 }
@@ -4784,13 +4880,14 @@ const _twGetAsset = path => {
 };
 
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg,
-  safeMsg: m
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg,
+    safeMsg: m
+  } = _ref;
   const guiDirection = addon.tab.direction;
   const helpHTML = "\n<div id=\"s3devHelpPop\" class=\"".concat(addon.tab.scratchClass("modal_modal-overlay"), "\" dir=\"").concat(guiDirection, "\">\n<div class=\"").concat(addon.tab.scratchClass("modal_modal-content"), "\">\n<div class=\"").concat(addon.tab.scratchClass("modal_header"), "\">\n  <div class=\"").concat(addon.tab.scratchClass("modal_header-item", "modal_header-item-title"), "\">").concat(m("help-title"), "</div>\n  <div class=\"").concat(addon.tab.scratchClass("modal_header-item", "modal_header-item-close"), "\">\n    <div class=\"").concat(addon.tab.scratchClass("close-button_close-button", "close-button_large", {
     others: "close-button"
@@ -4833,12 +4930,13 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   const Blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
   const SCRATCH_ITEMS_TO_HIDE = ["RENAME_VARIABLE_ID", "DELETE_VARIABLE_ID", "NEW_BROADCAST_MESSAGE_ID"];
@@ -4854,8 +4952,12 @@ __webpack_require__.r(__webpack_exports__);
   let resultOfLastGetOptions = [];
   const oldDropDownDivShow = Blockly.DropDownDiv.show;
 
-  Blockly.DropDownDiv.show = function (...args) {
+  Blockly.DropDownDiv.show = function () {
     blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
     if (!blocklyDropdownMenu) {
       return oldDropDownDivShow.call(this, ...args);
@@ -5051,11 +5153,15 @@ __webpack_require__.r(__webpack_exports__);
     return items.map((item, index) => ({
       item,
       score: rank(item, index)
-    })).sort(({
-      score: scoreA
-    }, {
-      score: scoreB
-    }) => Math.max(0, scoreB) - Math.max(0, scoreA));
+    })).sort((_ref2, _ref3) => {
+      let {
+        score: scoreA
+      } = _ref2;
+      let {
+        score: scoreB
+      } = _ref3;
+      return Math.max(0, scoreB) - Math.max(0, scoreA);
+    });
   }
 
   function updateSearch() {
@@ -5214,9 +5320,9 @@ const resources = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _url_loader_folder_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./folder.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/folders/folder.svg");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -5228,12 +5334,13 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -5483,7 +5590,8 @@ const _twGetAsset = path => {
     }
   };
 
-  const fixCostumeOrder = (target = vm.editingTarget) => {
+  const fixCostumeOrder = function fixCostumeOrder() {
+    let target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : vm.editingTarget;
     const {
       items,
       changed
@@ -5495,7 +5603,8 @@ const _twGetAsset = path => {
     }
   };
 
-  const fixSoundOrder = (target = vm.editingTarget) => {
+  const fixSoundOrder = function fixSoundOrder() {
+    let target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : vm.editingTarget;
     const {
       items,
       changed
@@ -6124,7 +6233,11 @@ const _twGetAsset = path => {
     for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
       const original = SpriteSelectorItem.prototype[method];
 
-      SpriteSelectorItem.prototype[method] = function (...args) {
+      SpriteSelectorItem.prototype[method] = function () {
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
         if (typeof this.props.id === "number") {
           const itemData = getItemData(this.props);
 
@@ -6145,7 +6258,7 @@ const _twGetAsset = path => {
 
     const originalHandleDragEnd = SpriteSelectorItem.prototype.handleDragEnd;
 
-    SpriteSelectorItem.prototype.handleDragEnd = function (...args) {
+    SpriteSelectorItem.prototype.handleDragEnd = function () {
       const itemData = getItemData(this.props);
 
       if (itemData) {
@@ -6168,12 +6281,20 @@ const _twGetAsset = path => {
         }
       }
 
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
       return originalHandleDragEnd.call(this, ...args);
     };
 
     const originalHandleClick = SpriteSelectorItem.prototype.handleClick;
 
-    SpriteSelectorItem.prototype.handleClick = function (...args) {
+    SpriteSelectorItem.prototype.handleClick = function () {
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
+
       const e = args[0];
 
       if (e && !this.noClick) {
@@ -6250,7 +6371,11 @@ const _twGetAsset = path => {
     const RenderedTarget = vm.runtime.targets[0].constructor;
     const originalInstallTargets = vm.installTargets;
 
-    vm.installTargets = function (...args) {
+    vm.installTargets = function () {
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
+      }
+
       if (currentSpriteFolder !== null) {
         const targets = args[0];
         const wholeProject = args[2];
@@ -6272,7 +6397,11 @@ const _twGetAsset = path => {
 
     const originalAddCostume = RenderedTarget.prototype.addCostume;
 
-    RenderedTarget.prototype.addCostume = function (...args) {
+    RenderedTarget.prototype.addCostume = function () {
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
+      }
+
       if (currentAssetFolder !== null) {
         const costume = args[0];
 
@@ -6288,7 +6417,11 @@ const _twGetAsset = path => {
 
     const originalAddSound = RenderedTarget.prototype.addSound;
 
-    RenderedTarget.prototype.addSound = function (...args) {
+    RenderedTarget.prototype.addSound = function () {
+      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
+      }
+
       if (currentAssetFolder !== null) {
         const sound = args[0];
 
@@ -6302,15 +6435,16 @@ const _twGetAsset = path => {
       return r;
     };
 
-    const abstractReorder = ({
-      guiItems,
-      getAll,
-      set,
-      rename,
-      getVMItemFromGUIItem,
-      zeroIndexed,
-      onFolderChanged
-    }, itemIndex, newIndex) => {
+    const abstractReorder = (_ref2, itemIndex, newIndex) => {
+      let {
+        guiItems,
+        getAll,
+        set,
+        rename,
+        getVMItemFromGUIItem,
+        zeroIndexed,
+        onFolderChanged
+      } = _ref2;
       // First index depends on zeroIndexed
       itemIndex = clamp(itemIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
       newIndex = clamp(newIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
@@ -6541,7 +6675,11 @@ const _twGetAsset = path => {
 
     const originalHandleDrop = Backpack.prototype.handleDrop;
 
-    Backpack.prototype.handleDrop = function (...args) {
+    Backpack.prototype.handleDrop = function () {
+      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+        args[_key7] = arguments[_key7];
+      }
+
       // When a folder is dropped into the backpack, upload all the items in the folder.
       const dragInfo = args[0];
       const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
@@ -6645,11 +6783,12 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async ({
-  addon,
-  console,
-  msg
-}) => {
+/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
+  let {
+    addon,
+    console,
+    msg
+  } = _ref;
   const types = ["sound", "costume"];
   addon.tab.createEditorContextMenu(ctx => {
     const target = addon.tab.traps.vm.editingTarget;
@@ -6747,12 +6886,13 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   const paper = await addon.tab.traps.getPaper();
   const paintEditorCanvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']");
 
@@ -6858,9 +6998,14 @@ const _twGetAsset = path => {
 
     const originalImportImage = PaperCanvas.prototype.importImage;
 
-    PaperCanvas.prototype.importImage = function (...args) {
+    PaperCanvas.prototype.importImage = function () {
       expectingImport = true;
       removeOnionLayers();
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
       return originalImportImage.call(this, ...args);
     }; // recalibrateSize is called when the canvas finishes loading an image.
     // all paths of importImage will result in a call to this method.
@@ -6968,7 +7113,8 @@ const _twGetAsset = path => {
     return [referenceColor[0] * weighted, referenceColor[1] * weighted, referenceColor[2] * weighted];
   };
 
-  const toHexColor = ([red, green, blue]) => {
+  const toHexColor = _ref2 => {
+    let [red, green, blue] = _ref2;
     const r = Math.round(red).toString(16).padStart(2, "0");
     const g = Math.round(green).toString(16).padStart(2, "0");
     const b = Math.round(blue).toString(16).padStart(2, "0");
@@ -7038,7 +7184,7 @@ const _twGetAsset = path => {
     let renderedAtScale = 0;
     const originalDraw = raster.draw;
 
-    raster.draw = function (...args) {
+    raster.draw = function () {
       const displayedSize = this.getView().getZoom() * window.devicePixelRatio;
       const newScale = Math.max(1, Math.min(maxScale, 2 ** Math.ceil(Math.log2(displayedSize))));
 
@@ -7064,6 +7210,10 @@ const _twGetAsset = path => {
         ctx.restore();
         this.matrix.reset();
         this.transform(new paper.Matrix().translate(topLeft.add(size.divide(2))).scale(1 / newScale));
+      }
+
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
       }
 
       return originalDraw.call(this, ...args);
@@ -7274,11 +7424,12 @@ const _twGetAsset = path => {
         });
       }
 
-      const onions = await Promise.all(layersToCreate.map(({
-        index,
-        isBefore,
-        opacity
-      }) => {
+      const onions = await Promise.all(layersToCreate.map(_ref3 => {
+        let {
+          index,
+          isBefore,
+          opacity
+        } = _ref3;
         const onionCostume = costumes[index];
         const onionAsset = vm.getCostume(index);
 
@@ -7360,9 +7511,10 @@ const _twGetAsset = path => {
     return el;
   };
 
-  const createButton = ({
-    useButtonTag
-  } = {}) => {
+  const createButton = function createButton() {
+    let {
+      useButtonTag
+    } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const el = document.createElement(useButtonTag ? "button" : "span");
     el.className = "sa-onion-button";
     el.setAttribute("role", "button");
@@ -7656,18 +7808,19 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  msg,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    msg,
+    global,
+    console
+  } = _ref;
   const brand = Symbol();
 
   const setIsPicking = picking => document.body.classList.toggle("sa-stage-color-picker-picking", picking);
@@ -7771,7 +7924,9 @@ class RateLimiter {
     this.wait = wait;
   }
 
-  abort(call = true) {
+  abort() {
+    let call = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
     if (this.timeout) {
       clearTimeout(this.timeout);
       if (call) this.callback();

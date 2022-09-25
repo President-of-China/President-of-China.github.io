@@ -188,11 +188,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _highlighter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./highlighter.js */ "./src/addons/addons/editor-stepping/highlighter.js");
 
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   const vm = addon.tab.traps.vm;
   const highlighter = new _highlighter_js__WEBPACK_IMPORTED_MODULE_1__["default"](0, addon.settings.get("highlight-color"));
   addon.settings.addEventListener("change", () => {
@@ -203,7 +204,11 @@ __webpack_require__.r(__webpack_exports__);
   });
   const oldStep = vm.runtime._step;
 
-  vm.runtime._step = function (...args) {
+  vm.runtime._step = function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     oldStep.call(this, ...args);
 
     if (!addon.self.disabled) {

@@ -788,7 +788,11 @@ class SharedDispatch {
    */
 
 
-  call(service, method, ...args) {
+  call(service, method) {
+    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      args[_key - 2] = arguments[_key];
+    }
+
     return this.transferCall(service, method, null, ...args);
   }
   /**
@@ -808,7 +812,7 @@ class SharedDispatch {
    */
 
 
-  transferCall(service, method, transfer, ...args) {
+  transferCall(service, method, transfer) {
     try {
       const {
         provider,
@@ -816,6 +820,10 @@ class SharedDispatch {
       } = this._getServiceProvider(service);
 
       if (provider) {
+        for (var _len2 = arguments.length, args = new Array(_len2 > 3 ? _len2 - 3 : 0), _key2 = 3; _key2 < _len2; _key2++) {
+          args[_key2 - 3] = arguments[_key2];
+        }
+
         if (isRemote) {
           return this._remoteTransferCall(provider, service, method, transfer, ...args);
         }
@@ -850,7 +858,11 @@ class SharedDispatch {
    */
 
 
-  _remoteCall(provider, service, method, ...args) {
+  _remoteCall(provider, service, method) {
+    for (var _len3 = arguments.length, args = new Array(_len3 > 3 ? _len3 - 3 : 0), _key3 = 3; _key3 < _len3; _key3++) {
+      args[_key3 - 3] = arguments[_key3];
+    }
+
     return this._remoteTransferCall(provider, service, method, null, ...args);
   }
   /**
@@ -864,7 +876,11 @@ class SharedDispatch {
    */
 
 
-  _remoteTransferCall(provider, service, method, transfer, ...args) {
+  _remoteTransferCall(provider, service, method, transfer) {
+    for (var _len4 = arguments.length, args = new Array(_len4 > 4 ? _len4 - 4 : 0), _key4 = 4; _key4 < _len4; _key4++) {
+      args[_key4 - 4] = arguments[_key4];
+    }
+
     return new Promise((resolve, reject) => {
       const responseId = this._storeCallbacks(resolve, reject);
       /** @TODO: remove this hack! this is just here so we don't try to send `util` to a worker */

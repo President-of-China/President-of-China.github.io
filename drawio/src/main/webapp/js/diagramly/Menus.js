@@ -303,9 +303,12 @@
         var toggleDarkModeAction = editorUi.actions.put('toggleDarkMode', new Action(mxResources.get('dark'), function(e)
         {
 			editorUi.setDarkMode(!Editor.isDarkMode());
+			mxSettings.settings.darkMode = Editor.isDarkMode();
+			mxSettings.save();
+			
 			var theme = mxSettings.getUi();
 			
-			if (theme != 'atlas' && theme != 'min' && theme != 'sketch')
+			if (theme != 'atlas' && theme != 'min' && theme != 'sketch' && theme != 'simple')
 			{
 				editorUi.setCurrentTheme((!Editor.isDarkMode()) ? 'kennedy' : 'dark', true);
 			}
@@ -313,6 +316,23 @@
 
 		toggleDarkModeAction.setToggleAction(true);
 		toggleDarkModeAction.setSelectedCallback(function() { return Editor.isDarkMode(); });
+		
+        var toggleSimpleModeAction = editorUi.actions.put('toggleSimpleMode', new Action(mxResources.get('simple'), function(e)
+        {
+			editorUi.setCurrentTheme((Editor.currentTheme == 'simple') ?
+				((!Editor.isDarkMode()) ? 'kennedy' : 'dark') : 'simple');
+        }));
+
+		toggleSimpleModeAction.setToggleAction(true);
+		toggleSimpleModeAction.setSelectedCallback(function() { return Editor.currentTheme == 'simple'; });
+		
+        var toggleSketchModeAction = editorUi.actions.put('toggleSketchMode', new Action(mxResources.get('sketch'), function(e)
+        {
+			editorUi.setSketchMode(!Editor.sketchMode);
+        }));
+
+		toggleSketchModeAction.setToggleAction(true);
+		toggleSketchModeAction.setSelectedCallback(function() { return Editor.sketchMode; });
 		
 		editorUi.actions.addAction('properties...', function()
 		{
@@ -1244,19 +1264,15 @@
 				var menubar = menusCreateMenuBar.apply(this, arguments);
 				
 				if (menubar != null && urlParams['embed'] != '1' &&
-					(uiTheme != 'atlas' && urlParams['live-ui'] == '1'))
+					uiTheme != 'atlas' && urlParams['live-ui'] == '1')
 				{
-					var langMenu = this.get((urlParams['live-ui'] == '1') ?
-						'appearance' : 'language');
+					var themeMenu = this.get('appearance');
 					
-					if (langMenu != null)
+					if (themeMenu != null)
 					{
-						var elt = menubar.addMenu('', langMenu.funct);
-						elt.setAttribute('title', mxResources.get(
-							(urlParams['live-ui'] == '1') ?
-							'theme' : 'language'));
+						var elt = menubar.addMenu('', themeMenu.funct);
+						elt.setAttribute('title', mxResources.get('theme'));
 						elt.className = 'geToolbarButton geAdaptiveAsset';
-						elt.style.backgroundImage = 'url(' + Editor.globeImage + ')';
 						elt.style.backgroundPosition = 'center center';
 						elt.style.backgroundRepeat = 'no-repeat';
 						elt.style.backgroundSize = '100% 100%';
@@ -1279,7 +1295,7 @@
 						}
 						else
 						{
-							elt.style.right = '14px';
+							elt.style.right = '10px';
 							elt.style.top = '5px';
 						}
 						
@@ -1293,22 +1309,15 @@
 						document.body.appendChild(elt);
 						menubar.langIcon = elt;
 
-						if (urlParams['live-ui'] == '1')
+						var updateThemeElement = mxUtils.bind(this, function()
 						{
-							var updateThemeElement = mxUtils.bind(this, function()
-							{
-								elt.style.backgroundImage = 'url(\'' + ((Editor.isDarkMode() || uiTheme == 'atlas') ?
-									Editor.darkModeImage : Editor.lightModeImage) + '\')';
-							});
-				
-							this.editorUi.addListener('darkModeChanged', updateThemeElement);
-							updateThemeElement();
-						}
-						else
-						{
-							mxUtils.setOpacity(elt, 40);
-						}
-
+							elt.style.backgroundImage = 'url(' + ((Editor.isDarkMode()) ?
+								Editor.darkModeImage : Editor.lightModeImage) + ')';
+						});
+			
+						this.editorUi.addListener('darkModeChanged', updateThemeElement);
+						updateThemeElement();
+						
 						this.editorUi.switchThemeElt = elt;
 					}
 				}
@@ -1393,7 +1402,7 @@
 		{
 			viewZoomMenuFunct.apply(this, arguments);
 
-			var sketchTheme = Editor.currentTheme == 'sketch' || urlParams['sketch'] == '1';
+			var sketchTheme = Editor.currentTheme == 'simple' || urlParams['sketch'] == '1';
 			
 			if (sketchTheme || uiTheme == 'min')
 			{
@@ -2892,22 +2901,14 @@
 			{
 				this.addMenuItems(menu, ['toggleDarkMode'], parent);
 			}
-			
-			var item = menu.addItem(mxResources.get('simple'), null, function()
-			{
-				editorUi.setCurrentTheme((Editor.currentTheme == 'sketch') ? '' : 'sketch');
-			}, parent);
 
-			if (Editor.currentTheme == 'sketch')
-			{
-				menu.addCheckmark(item, Editor.checkmarkImage);
-			}
+			this.addMenuItems(menu, ['toggleSimpleMode', 'toggleSketchMode'], parent);
 		})));
 
 		this.put('theme', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
 			var theme = (urlParams['sketch'] == '1') ? 'sketch' : mxSettings.getUi();
-
+			
 			if (urlParams['embedInline'] != '1' && Editor.isDarkMode() ||
 				(!mxClient.IS_IE && !mxClient.IS_IE11))
 			{
@@ -2922,8 +2923,8 @@
 			}, parent);
 			
 			if (theme != 'kennedy' && theme != 'atlas' &&
-				theme != 'dark' && theme != 'min' &&
-				theme != 'sketch')
+				theme != 'dark' && theme != 'simple' &&
+				theme != 'sketch' && theme != 'min')
 			{
 				menu.addCheckmark(item, Editor.checkmarkImage);
 			}
@@ -2933,7 +2934,7 @@
 				editorUi.setCurrentTheme('kennedy');
 			}, parent);
 
-			if (theme == 'kennedy' || theme == 'dark')
+			if (theme == 'kennedy' || theme == 'dark' || theme == 'simple')
 			{
 				menu.addCheckmark(item, Editor.checkmarkImage);
 			}
@@ -3351,22 +3352,6 @@
 			}
 		}, null, null, 'C')).isEnabled = isGraphEnabled;
 
-		var toggleFormat = editorUi.actions.put('toggleFormat', new Action(mxResources.get('format'), function()
-        {
-			if (editorUi.formatWindow != null)
-			{
-				editorUi.formatWindow.window.setVisible(
-					!editorUi.formatWindow.window.isVisible());
-			}
-        }));
-
-		toggleFormat.shortcut = editorUi.actions.get('formatPanel').shortcut;
-		toggleFormat.setToggleAction(true);
-		toggleFormat.setSelectedCallback(mxUtils.bind(this, function()
-		{
-			return editorUi.formatWindow != null && editorUi.formatWindow.window.isVisible();
-		}));
-		
 		var toggleShapes = editorUi.actions.put('toggleShapes', new Action(mxResources.get('shapes'), function()
         {
 			if (editorUi.sidebarWindow != null)
@@ -3374,9 +3359,14 @@
 				editorUi.sidebarWindow.window.setVisible(
 					!editorUi.sidebarWindow.window.isVisible());
 			}
-        }));
+			else
+			{
+				editorUi.hsplitPosition = (editorUi.hsplitPosition == 0) ?
+					EditorUi.prototype.hsplitPosition : 0;
+				editorUi.refresh();
+			}
+        }, null, null, Editor.ctrlKey + '+Shift+K'));
 
-		toggleShapes.shortcut = editorUi.actions.get('formatPanel').shortcut;
 		toggleShapes.setToggleAction(true);
 		toggleShapes.setSelectedCallback(mxUtils.bind(this, function()
 		{
@@ -3401,7 +3391,7 @@
 		this.put('insert', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
 			// Compatiblity code for live UI switch and static UI
-			var sketchTheme = Editor.currentTheme == 'sketch' || urlParams['sketch'] == '1';
+			var sketchTheme = Editor.currentTheme == 'simple' || urlParams['sketch'] == '1';
 			
 			if (sketchTheme)
 			{
@@ -3976,7 +3966,7 @@
 		// Overrides view menu to add search and scratchpad
 		this.put('view', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
-			this.addMenuItems(menu, ((this.editorUi.format != null) ? ['formatPanel'] : []).
+			this.addMenuItems(menu, ((this.editorUi.format != null) ? ['format'] : []).
 				concat(['outline', 'layers', 'tags']).concat((editorUi.commentsSupported()) ?
 				['comments', '-'] : ['-']));
 			
@@ -4007,7 +3997,7 @@
 
 			if (urlParams['sketch'] != '1')
 			{
-				 this.addMenuItems(menu, ['-', 'fullscreen'], parent);
+				this.addMenuItems(menu, ['-', 'fullscreen'], parent);
 			}
 		})));
 		
@@ -4065,7 +4055,7 @@
 		this.put('extras', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
 			// Compatiblity code for live UI switch and static UI
-			var sketchTheme = Editor.currentTheme == 'sketch' || urlParams['sketch'] == '1';
+			var sketchTheme = Editor.currentTheme == 'simple' || urlParams['sketch'] == '1';
 			
 			if (sketchTheme || uiTheme == 'min')
 			{
@@ -4273,7 +4263,7 @@
 			menu.addSeparator(parent);
 
 			// Compatiblity code for live UI switch and static UI
-			var sketchTheme = Editor.currentTheme == 'sketch' || urlParams['sketch'] == '1';
+			var sketchTheme = Editor.currentTheme == 'simple' || urlParams['sketch'] == '1';
 			
 			if (mxClient.IS_CHROMEAPP || EditorUi.isElectronApp)
 			{
@@ -4361,7 +4351,7 @@
 				editorUi.menus.addMenuItems(menu, ['comments', '-'], parent);
 			}
 	
-			editorUi.menus.addMenuItems(menu, ['toggleFormat', 'layers', 'tags', '-', 'pageSetup'], parent);
+			editorUi.menus.addMenuItems(menu, ['format', 'layers', 'tags', '-', 'pageSetup'], parent);
 	
 			// Cannot use print in standalone mode on iOS as we cannot open new windows
 			if (urlParams['noFileMenu'] != '1' && (!mxClient.IS_IOS || !navigator.standalone))
@@ -4436,7 +4426,7 @@
 		this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
 			// Compatiblity code for live UI switch and static UI
-			var minTheme = Editor.currentTheme == 'sketch' || uiTheme == 'min' ||
+			var minTheme = Editor.currentTheme == 'simple' || uiTheme == 'min' ||
 				Editor.currentTheme == 'min';
 
 			if (urlParams['embed'] == '1')

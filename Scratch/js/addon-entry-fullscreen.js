@@ -147,11 +147,12 @@ __webpack_require__.r(__webpack_exports__);
  * Used for the automatic browser full screen setting
  * and for hiding the scrollbar in full screen.
  */
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   const vm = addon.tab.traps.vm;
 
   const updateStageSize = () => {

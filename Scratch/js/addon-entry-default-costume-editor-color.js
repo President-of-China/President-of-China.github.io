@@ -28,12 +28,13 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   // We don"t *need* to wait for the costume editor to be opened, but redux updates take a non-zero
   // amount of CPU time so let's delay that for as long as possible.
   await addon.tab.traps.getPaper();
@@ -159,7 +160,8 @@ __webpack_require__.r(__webpack_exports__);
       this.gradientTypeAction = gradientTypeAction;
     }
 
-    get(state = addon.tab.redux.state) {
+    get() {
+      let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : addon.tab.redux.state;
       return state.scratchPaint.color[this.reduxPropertyName];
     }
 
@@ -258,9 +260,11 @@ __webpack_require__.r(__webpack_exports__);
 
   let activatingTool = false;
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", ({
-    detail
-  }) => {
+  addon.tab.redux.addEventListener("statechanged", _ref2 => {
+    let {
+      detail
+    } = _ref2;
+
     if (addon.self.disabled) {
       return;
     }

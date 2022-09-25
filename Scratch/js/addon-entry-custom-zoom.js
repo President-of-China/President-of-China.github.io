@@ -51,11 +51,12 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   await addon.tab.traps.getBlockly();
   let controlsRect;
   let previousIsHovered = false;

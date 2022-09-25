@@ -53,11 +53,12 @@ const resources = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libraries_common_cs_download_blob_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libraries/common/cs/download-blob.js */ "./src/addons/libraries/common/cs/download-blob.js");
 
-/* harmony default export */ __webpack_exports__["default"] = (async ({
-  addon,
-  console,
-  msg
-}) => {
+/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
+  let {
+    addon,
+    console,
+    msg
+  } = _ref;
   let recordElem;
   let isRecording = false;
   let isWaitingForFlag = false;

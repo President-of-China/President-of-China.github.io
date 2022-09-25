@@ -73,11 +73,12 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    console,
+    msg
+  } = _ref;
   let stageHidden = false;
   let bodyWrapper;
   let smallStageButton;

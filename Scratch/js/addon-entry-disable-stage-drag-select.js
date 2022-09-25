@@ -28,10 +28,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async ({
-  addon,
-  console
-}) => {
+/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
+  let {
+    addon,
+    console
+  } = _ref;
   const vm = addon.tab.traps.vm;
   let shiftKeyPressed = false;
   document.addEventListener("mousedown", function (e) {
@@ -42,7 +43,11 @@ __webpack_require__.r(__webpack_exports__);
 
   const oldStopDrag = vm.stopDrag;
 
-  vm.stopDrag = function (...args) {
+  vm.stopDrag = function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     if (shiftKeyPressed || addon.self.disabled) return oldStopDrag.call(this, ...args);
     const setEditingTarget = this.setEditingTarget;
 
@@ -56,7 +61,11 @@ __webpack_require__.r(__webpack_exports__);
 
   const oldGetTargetIdForDrawableId = vm.getTargetIdForDrawableId;
 
-  vm.getTargetIdForDrawableId = function (...args) {
+  vm.getTargetIdForDrawableId = function () {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
     const targetId = oldGetTargetIdForDrawableId.call(this, ...args);
     if (shiftKeyPressed || addon.self.disabled) return targetId;
 

@@ -32,11 +32,12 @@ __webpack_require__.r(__webpack_exports__);
  * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
  * It has been modified to work properly in our environment and fix some bugs.
  */
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console
+  } = _ref;
   const Blockly = await addon.tab.traps.getBlockly();
   const shouldWatchMouseCursor = addon.settings.get("watch");
   Blockly.BlockSvg.START_HAT_HEIGHT = 31;
@@ -259,9 +260,13 @@ __webpack_require__.r(__webpack_exports__);
 
   const originalRenderDraw = Blockly.BlockSvg.prototype.renderDraw_;
 
-  Blockly.BlockSvg.prototype.renderDraw_ = function (...args) {
+  Blockly.BlockSvg.prototype.renderDraw_ = function () {
     if (!this.svgFace_) {
       this.sa_catBlockConstructor();
+    }
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
     const r = originalRenderDraw.call(this, ...args);
@@ -279,13 +284,17 @@ __webpack_require__.r(__webpack_exports__);
 
   const originalDispose = Blockly.BlockSvg.prototype.dispose;
 
-  Blockly.BlockSvg.prototype.dispose = function (...args) {
+  Blockly.BlockSvg.prototype.dispose = function () {
     clearTimeout(this.blinkFn);
     clearTimeout(this.earFn);
     clearTimeout(this.ear2Fn);
 
     if (this.windowListener) {
       document.removeEventListener("mousemove", this.windowListener);
+    }
+
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
     }
 
     return originalDispose.call(this, ...args);

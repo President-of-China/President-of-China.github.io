@@ -553,12 +553,13 @@ const _twGetAsset = path => {
 
 
 
-async function createLogsTab({
-  debug,
-  addon,
-  console,
-  msg
-}) {
+async function createLogsTab(_ref) {
+  let {
+    debug,
+    addon,
+    console,
+    msg
+  } = _ref;
   const vm = addon.tab.traps.vm;
   const tab = debug.createHeaderTab({
     text: msg("tab-logs"),
@@ -672,16 +673,19 @@ async function createLogsTab({
       useEditorClasses: true
     }) : defaultFormat;
     if (!exportFormat) return;
-    const file = logView.rows.map(({
-      text,
-      targetInfo,
-      type,
-      count
-    }) => (exportFormat.replace(/\{(sprite|type|content)\}/g, (_, match) => ({
-      sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
-      type,
-      content: text
-    })[match]) + "\n").repeat(count)).join("");
+    const file = logView.rows.map(_ref2 => {
+      let {
+        text,
+        targetInfo,
+        type,
+        count
+      } = _ref2;
+      return (exportFormat.replace(/\{(sprite|type|content)\}/g, (_, match) => ({
+        sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
+        type,
+        content: text
+      })[match]) + "\n").repeat(count);
+    }).join("");
     downloadText("logs.txt", file);
   });
   const trashButton = debug.createHeaderButton({
@@ -828,12 +832,13 @@ const concatInPlace = (copyInto, copyFrom) => {
   }
 };
 
-async function createThreadsTab({
-  debug,
-  addon,
-  console,
-  msg
-}) {
+async function createThreadsTab(_ref) {
+  let {
+    debug,
+    addon,
+    console,
+    msg
+  } = _ref;
   const vm = addon.tab.traps.vm;
   const tab = debug.createHeaderTab({
     text: msg("tab-threads"),
@@ -1143,17 +1148,22 @@ const removeAllChildren = element => {
   }
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   Object(_module_js__WEBPACK_IMPORTED_MODULE_13__["setup"])(addon.tab.traps.vm);
   let logsTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
 
-  const logMessage = (...args) => {
+  const logMessage = function logMessage() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     if (logsTab) {
       logsTab.addLog(...args);
     } else {
@@ -1185,27 +1195,30 @@ const removeAllChildren = element => {
   addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-log"),
-    callback: ({
-      content
-    }, thread) => {
+    callback: (_ref2, thread) => {
+      let {
+        content
+      } = _ref2;
       logMessage(content, thread, "log");
     }
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
-    callback: ({
-      content
-    }, thread) => {
+    callback: (_ref3, thread) => {
+      let {
+        content
+      } = _ref3;
       logMessage(content, thread, "warn");
     }
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
-    callback: ({
-      content
-    }, thread) => {
+    callback: (_ref4, thread) => {
+      let {
+        content
+      } = _ref4;
       logMessage(content, thread, "error");
     }
   });
@@ -1331,11 +1344,12 @@ const removeAllChildren = element => {
   interfaceContainer.append(interfaceHeader, compilerWarning, tabContentContainer);
   document.body.append(interfaceContainer);
 
-  const createHeaderButton = ({
-    text,
-    icon,
-    description
-  }) => {
+  const createHeaderButton = _ref5 => {
+    let {
+      text,
+      icon,
+      description
+    } = _ref5;
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false
@@ -1361,10 +1375,11 @@ const removeAllChildren = element => {
     };
   };
 
-  const createHeaderTab = ({
-    text,
-    icon
-  }) => {
+  const createHeaderTab = _ref6 => {
+    let {
+      text,
+      icon
+    } = _ref6;
     const tab = document.createElement("li");
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon,
@@ -1403,7 +1418,11 @@ const removeAllChildren = element => {
   const originalStep = vm.runtime._step;
   const afterStepCallbacks = [];
 
-  vm.runtime._step = function (...args) {
+  vm.runtime._step = function () {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
     const ret = originalStep.call(this, ...args);
 
     for (const cb of afterStepCallbacks) {
@@ -1753,7 +1772,7 @@ const removeAllChildren = element => {
   });
   const ogGreenFlag = vm.runtime.greenFlag;
 
-  vm.runtime.greenFlag = function (...args) {
+  vm.runtime.greenFlag = function () {
     if (addon.settings.get("log_clear_greenflag")) {
       logsTab.clearLogs();
     }
@@ -1762,16 +1781,24 @@ const removeAllChildren = element => {
       logsTab.addLog(msg("log-msg-flag-clicked"), null, "internal");
     }
 
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+
     return ogGreenFlag.call(this, ...args);
   };
 
   const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
 
-  vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
+  vm.runtime.targets[0].constructor.prototype.makeClone = function () {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
       logsTab.addLog(msg("log-msg-clone-cap", {
         sprite: this.getName()
       }), vm.runtime.sequencer.activeThread, "internal-warn");
+    }
+
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
     }
 
     var clone = ogMakeClone.call(this, ...args);
@@ -1787,11 +1814,15 @@ const removeAllChildren = element => {
 
   const ogStartHats = vm.runtime.startHats;
 
-  vm.runtime.startHats = function (hat, optMatchFields, ...args) {
+  vm.runtime.startHats = function (hat, optMatchFields) {
     if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
       logsTab.addLog(msg("log-msg-broadcasted", {
         broadcast: optMatchFields.BROADCAST_OPTION
       }), vm.runtime.sequencer.activeThread, "internal");
+    }
+
+    for (var _len5 = arguments.length, args = new Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
+      args[_key5 - 2] = arguments[_key5];
     }
 
     return ogStartHats.call(this, hat, optMatchFields, ...args);

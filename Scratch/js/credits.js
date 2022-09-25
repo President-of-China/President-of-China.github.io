@@ -211,7 +211,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./tw-theme-dark.css */ "./node_modules/raw-loader/index.js!./src/lib/tw-theme-dark.css");
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__);
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
@@ -379,7 +379,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fosshost_light_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./fosshost-light.png */ "./src/playground/credits/fosshost-light.png");
 /* harmony import */ var _fosshost_light_png__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_fosshost_light_png__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./users */ "./src/playground/credits/users.js");
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
@@ -393,23 +393,26 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 document.documentElement.lang = 'en';
 
-const User = ({
-  image,
-  text,
-  href
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-  href: href,
-  target: "_blank",
-  rel: "noreferrer",
-  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.user
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userImage,
-  src: image,
-  width: "60",
-  height: "60"
-}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userInfo
-}, text));
+const User = _ref => {
+  let {
+    image,
+    text,
+    href
+  } = _ref;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: href,
+    target: "_blank",
+    rel: "noreferrer",
+    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.user
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userImage,
+    src: image,
+    width: "60",
+    height: "60"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.userInfo
+  }, text));
+};
 
 User.propTypes = {
   image: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string.isRequired,
@@ -417,13 +420,16 @@ User.propTypes = {
   href: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string
 };
 
-const UserList = ({
-  users
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.users
-}, users.map((data, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(User, _extends({
-  key: index
-}, data))));
+const UserList = _ref2 => {
+  let {
+    users
+  } = _ref2;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _credits_css__WEBPACK_IMPORTED_MODULE_4___default.a.users
+  }, users.map((data, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(User, _extends({
+    key: index
+  }, data))));
+};
 
 UserList.propTypes = {
   users: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object)
@@ -489,15 +495,18 @@ const shuffle = list => {
   return list;
 };
 
-const fromHardcoded = ({
-  userId,
-  username,
-  name
-}) => ({
-  image: "https://trampoline.turbowarp.org/avatars/".concat(userId),
-  href: "https://scratch.mit.edu/users/".concat(username, "/"),
-  text: name || username
-});
+const fromHardcoded = _ref => {
+  let {
+    userId,
+    username,
+    name
+  } = _ref;
+  return {
+    image: "https://trampoline.turbowarp.org/avatars/".concat(userId),
+    href: "https://scratch.mit.edu/users/".concat(username, "/"),
+    text: name || username
+  };
+};
 
 const addonDevelopers = [{
   userId: '34018398',

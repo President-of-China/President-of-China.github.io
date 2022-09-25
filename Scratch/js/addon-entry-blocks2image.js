@@ -28,12 +28,13 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function ({
-  addon,
-  global,
-  console,
-  msg
-}) {
+/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
+  let {
+    addon,
+    global,
+    console,
+    msg
+  } = _ref;
   let style = document.createElement("style");
   style.textContent = "\n  .blocklyText {\n      fill: #fff;\n      font-family: \"Helvetica Neue\", Helvetica, sans-serif;\n      font-size: 12pt;\n      font-weight: 500;\n  }\n  .blocklyNonEditableText>text, .blocklyEditableText>text {\n      fill: #575E75;\n  }\n  .blocklyDropdownText {\n      fill: #fff !important;\n  }\n  ";
   let exSVG = document.createElement("svg");

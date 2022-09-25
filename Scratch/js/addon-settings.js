@@ -995,7 +995,8 @@ if (!Blob.prototype.text) {
 }
 
 if (!Array.prototype.flat) {
-  Array.prototype.flat = function (depth = 1) {
+  Array.prototype.flat = function () {
+    let depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
     const result = [];
 
     for (const i of this) {
@@ -1300,13 +1301,13 @@ var _generated_upstream_meta_json__WEBPACK_IMPORTED_MODULE_8___namespace = /*#__
 /* harmony import */ var _lib_normalize_css__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(_lib_normalize_css__WEBPACK_IMPORTED_MODULE_20__);
 const _excluded = ["onChange", "value"];
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -1448,19 +1449,22 @@ const groupAddons = () => {
 
 const groupedAddons = groupAddons();
 
-const CreditList = ({
-  credits
-}) => credits.map((author, index) => {
-  const isLast = index === credits.length - 1;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.credit,
-    key: index
-  }, author.link ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: author.link,
-    target: "_blank",
-    rel: "noreferrer"
-  }, author.name) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, author.name), isLast ? null : ', ');
-});
+const CreditList = _ref => {
+  let {
+    credits
+  } = _ref;
+  return credits.map((author, index) => {
+    const isLast = index === credits.length - 1;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.credit,
+      key: index
+    }, author.link ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: author.link,
+      target: "_blank",
+      rel: "noreferrer"
+    }, author.name) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, author.name), isLast ? null : ', ');
+  });
+};
 
 CreditList.propTypes = {
   credits: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
@@ -1469,12 +1473,12 @@ CreditList.propTypes = {
   }))
 };
 
-const Switch = _ref => {
+const Switch = _ref2 => {
   let {
     onChange,
     value
-  } = _ref,
-      props = _objectWithoutProperties(_ref, _excluded);
+  } = _ref2,
+      props = _objectWithoutProperties(_ref2, _excluded);
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", _extends({
     className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.switch,
@@ -1491,23 +1495,26 @@ Switch.propTypes = {
   value: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool
 };
 
-const Select = ({
-  onChange,
-  value,
-  values
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.select
-}, values.map(potentialValue => {
-  const id = potentialValue.id;
-  const selected = id === value;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    key: id,
-    onClick: () => onChange(id),
-    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.selectOption, {
-      [_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.selected]: selected
-    })
-  }, potentialValue.name);
-}));
+const Select = _ref3 => {
+  let {
+    onChange,
+    value,
+    values
+  } = _ref3;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.select
+  }, values.map(potentialValue => {
+    const id = potentialValue.id;
+    const selected = id === value;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      key: id,
+      onClick: () => onChange(id),
+      className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.selectOption, {
+        [_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.selected]: selected
+      })
+    }, potentialValue.name);
+  }));
+};
 
 Select.propTypes = {
   onChange: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
@@ -1518,21 +1525,24 @@ Select.propTypes = {
   }))
 };
 
-const Tags = ({
-  manifest
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagContainer
-}, manifest.tags.includes('recommended') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagRecommended)
-}, settingsTranslations.tagRecommended), manifest.tags.includes('theme') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagTheme)
-}, settingsTranslations.tagTheme), manifest.tags.includes('beta') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagBeta)
-}, settingsTranslations.tagBeta), manifest.tags.includes('new') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagNew)
-}, settingsTranslations.tagNew), manifest.tags.includes('danger') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagDanger)
-}, settingsTranslations.tagDanger));
+const Tags = _ref4 => {
+  let {
+    manifest
+  } = _ref4;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagContainer
+  }, manifest.tags.includes('recommended') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagRecommended)
+  }, settingsTranslations.tagRecommended), manifest.tags.includes('theme') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagTheme)
+  }, settingsTranslations.tagTheme), manifest.tags.includes('beta') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagBeta)
+  }, settingsTranslations.tagBeta), manifest.tags.includes('new') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagNew)
+  }, settingsTranslations.tagNew), manifest.tags.includes('danger') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tag, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.tagDanger)
+  }, settingsTranslations.tagDanger));
+};
 
 Tags.propTypes = {
   manifest: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
@@ -1623,19 +1633,22 @@ TextInput.propTypes = {
   value: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number])
 };
 
-const ResetButton = ({
-  addonId,
-  settingId,
-  forTextInput
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.button, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetSettingButton),
-  onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].setAddonSetting(addonId, settingId, null),
-  title: settingsTranslations.reset,
-  "data-for-text-input": forTextInput
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  src: _undo_svg__WEBPACK_IMPORTED_MODULE_15___default.a,
-  alt: settingsTranslations.reset
-}));
+const ResetButton = _ref5 => {
+  let {
+    addonId,
+    settingId,
+    forTextInput
+  } = _ref5;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.button, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetSettingButton),
+    onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].setAddonSetting(addonId, settingId, null),
+    title: settingsTranslations.reset,
+    "data-for-text-input": forTextInput
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    src: _undo_svg__WEBPACK_IMPORTED_MODULE_15___default.a,
+    alt: settingsTranslations.reset
+  }));
+};
 
 ResetButton.propTypes = {
   addonId: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
@@ -1643,11 +1656,13 @@ ResetButton.propTypes = {
   forTextInput: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool
 };
 
-const Setting = ({
-  addonId,
-  setting,
-  value
-}) => {
+const Setting = _ref6 => {
+  let {
+    addonId,
+    setting,
+    value
+  } = _ref6;
+
   if (setting.if && setting.if.addonEnabled) {
     const addons = Array.isArray(setting.if.addonEnabled) ? setting.if.addonEnabled : [setting.if.addonEnabled];
 
@@ -1702,13 +1717,16 @@ const Setting = ({
     settingId: settingId
   })), setting.type === 'select' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, label, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Select, {
     value: value,
-    values: setting.potentialValues.map(({
-      id,
-      name
-    }) => ({
-      id,
-      name: addonTranslations["".concat(addonId, "/@settings-select-").concat(settingId, "-").concat(id)] || name
-    })),
+    values: setting.potentialValues.map(_ref7 => {
+      let {
+        id,
+        name
+      } = _ref7;
+      return {
+        id,
+        name: addonTranslations["".concat(addonId, "/@settings-select-").concat(settingId, "-").concat(id)] || name
+      };
+    }),
     onChange: v => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].setAddonSetting(addonId, settingId, v),
     setting: setting
   })));
@@ -1736,42 +1754,48 @@ Setting.propTypes = {
   value: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool, prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number])
 };
 
-const Notice = ({
-  type,
-  text
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.notice,
-  type: type
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.noticeIcon,
-  src: _info_svg__WEBPACK_IMPORTED_MODULE_17___default.a,
-  alt: "",
-  draggable: false
-})), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, text));
+const Notice = _ref8 => {
+  let {
+    type,
+    text
+  } = _ref8;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.notice,
+    type: type
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.noticeIcon,
+    src: _info_svg__WEBPACK_IMPORTED_MODULE_17___default.a,
+    alt: "",
+    draggable: false
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, text));
+};
 
 Notice.propTypes = {
   type: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
   text: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
 };
 
-const Presets = ({
-  addonId,
-  presets
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.setting, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.presets)
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.settingLabel
-}, settingsTranslations.presets), presets.map(preset => {
-  const presetId = preset.id;
-  const name = addonTranslations["".concat(addonId, "/@preset-name-").concat(presetId)] || preset.name;
-  const description = addonTranslations["".concat(addonId, "/@preset-description-").concat(presetId)] || preset.description;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    key: presetId,
-    title: description,
-    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.button, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.presetButton),
-    onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].applyAddonPreset(addonId, presetId)
-  }, name);
-}));
+const Presets = _ref9 => {
+  let {
+    addonId,
+    presets
+  } = _ref9;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.setting, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.presets)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.settingLabel
+  }, settingsTranslations.presets), presets.map(preset => {
+    const presetId = preset.id;
+    const name = addonTranslations["".concat(addonId, "/@preset-name-").concat(presetId)] || preset.name;
+    const description = addonTranslations["".concat(addonId, "/@preset-description-").concat(presetId)] || preset.description;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      key: presetId,
+      title: description,
+      className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.button, _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.presetButton),
+      onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].applyAddonPreset(addonId, presetId)
+    }, name);
+  }));
+};
 
 Presets.propTypes = {
   addonId: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
@@ -1783,85 +1807,88 @@ Presets.propTypes = {
   }))
 };
 
-const Addon = ({
-  id,
-  settings,
-  manifest,
-  extended
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addon, {
-    [_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonDirty]: settings.dirty
-  })
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonHeader
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonTitle
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonSwitch
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Switch, {
-  value: settings.enabled,
-  onChange: value => {
-    if (!value || !manifest.tags.includes('danger') || confirm(settingsTranslations.enableDangerous)) {
-      _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].setAddonEnabled(id, value);
+const Addon = _ref10 => {
+  let {
+    id,
+    settings,
+    manifest,
+    extended
+  } = _ref10;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()(_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addon, {
+      [_settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonDirty]: settings.dirty
+    })
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonHeader
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonTitle
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonSwitch
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Switch, {
+    value: settings.enabled,
+    onChange: value => {
+      if (!value || !manifest.tags.includes('danger') || confirm(settingsTranslations.enableDangerous)) {
+        _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].setAddonEnabled(id, value);
+      }
     }
-  }
-})), manifest.tags.includes('theme') ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.extensionImage,
-  src: _brush_svg__WEBPACK_IMPORTED_MODULE_14___default.a,
-  draggable: false,
-  alt: ""
-}) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.extensionImage,
-  src: _extension_svg__WEBPACK_IMPORTED_MODULE_13___default.a,
-  draggable: false,
-  alt: ""
-}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonTitleText
-}, addonTranslations["".concat(id, "/@name")] || manifest.name), extended && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonId
-}, "(".concat(id, ")"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Tags, {
-  manifest: manifest
-}), !settings.enabled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.inlineDescription
-}, addonTranslations["".concat(id, "/@description")] || manifest.description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonOperations
-}, settings.enabled && manifest.settings && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetButton,
-  onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].resetAddon(id),
-  title: settingsTranslations.reset
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-  src: _undo_svg__WEBPACK_IMPORTED_MODULE_15___default.a,
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetButtonImage,
-  alt: settingsTranslations.reset,
-  draggable: false
-})))), settings.enabled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonDetails
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.description
-}, addonTranslations["".concat(id, "/@description")] || manifest.description), manifest.credits && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.creditContainer
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.creditTitle
-}, settingsTranslations.credits), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CreditList, {
-  credits: manifest.credits
-})), manifest.info && manifest.info.map(info => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Notice, {
-  key: info.id,
-  type: info.type,
-  text: addonTranslations["".concat(id, "/@info-").concat(info.id)] || info.text
-})), manifest.noCompiler && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Notice, {
-  type: "warning",
-  text: settingsTranslations.noCompiler
-}), manifest.settings && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.settingContainer
-}, manifest.settings.map(setting => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Setting, {
-  key: setting.id,
-  addonId: id,
-  setting: setting,
-  value: settings[setting.id]
-})), manifest.presets && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Presets, {
-  addonId: id,
-  presets: manifest.presets
-}))));
+  })), manifest.tags.includes('theme') ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.extensionImage,
+    src: _brush_svg__WEBPACK_IMPORTED_MODULE_14___default.a,
+    draggable: false,
+    alt: ""
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.extensionImage,
+    src: _extension_svg__WEBPACK_IMPORTED_MODULE_13___default.a,
+    draggable: false,
+    alt: ""
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonTitleText
+  }, addonTranslations["".concat(id, "/@name")] || manifest.name), extended && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonId
+  }, "(".concat(id, ")"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Tags, {
+    manifest: manifest
+  }), !settings.enabled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.inlineDescription
+  }, addonTranslations["".concat(id, "/@description")] || manifest.description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonOperations
+  }, settings.enabled && manifest.settings && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetButton,
+    onClick: () => _settings_store_singleton__WEBPACK_IMPORTED_MODULE_11__["default"].resetAddon(id),
+    title: settingsTranslations.reset
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    src: _undo_svg__WEBPACK_IMPORTED_MODULE_15___default.a,
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.resetButtonImage,
+    alt: settingsTranslations.reset,
+    draggable: false
+  })))), settings.enabled && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.addonDetails
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.description
+  }, addonTranslations["".concat(id, "/@description")] || manifest.description), manifest.credits && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.creditContainer
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.creditTitle
+  }, settingsTranslations.credits), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CreditList, {
+    credits: manifest.credits
+  })), manifest.info && manifest.info.map(info => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Notice, {
+    key: info.id,
+    type: info.type,
+    text: addonTranslations["".concat(id, "/@info-").concat(info.id)] || info.text
+  })), manifest.noCompiler && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Notice, {
+    type: "warning",
+    text: settingsTranslations.noCompiler
+  }), manifest.settings && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.settingContainer
+  }, manifest.settings.map(setting => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Setting, {
+    key: setting.id,
+    addonId: id,
+    setting: setting,
+    value: settings[setting.id]
+  })), manifest.presets && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Presets, {
+    addonId: id,
+    presets: manifest.presets
+  }))));
+};
 
 Addon.propTypes = {
   id: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
@@ -1899,19 +1926,25 @@ Dirty.propTypes = {
   onReloadNow: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func
 };
 
-const UnsupportedAddons = ({
-  addons: addonList
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedContainer
-}, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedText
-}, settingsTranslations.unsupported), addonList.map(({
-  id,
-  manifest
-}, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-  key: id,
-  className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedAddon
-}, addonTranslations["".concat(id, "/@name")] || manifest.name, index !== addonList.length - 1 && ', ')));
+const UnsupportedAddons = _ref11 => {
+  let {
+    addons: addonList
+  } = _ref11;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedContainer
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedText
+  }, settingsTranslations.unsupported), addonList.map((_ref12, index) => {
+    let {
+      id,
+      manifest
+    } = _ref12;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      key: id,
+      className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.unsupportedAddon
+    }, addonTranslations["".concat(id, "/@name")] || manifest.name, index !== addonList.length - 1 && ', ');
+  }));
+};
 
 UnsupportedAddons.propTypes = {
   addons: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
@@ -1922,20 +1955,26 @@ UnsupportedAddons.propTypes = {
   }))
 };
 
-const InternalAddonList = ({
-  addons,
-  extended
-}) => addons.map(({
-  id,
-  manifest,
-  state
-}) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Addon, {
-  key: id,
-  id: id,
-  settings: state,
-  manifest: manifest,
-  extended: extended
-}));
+const InternalAddonList = _ref13 => {
+  let {
+    addons,
+    extended
+  } = _ref13;
+  return addons.map(_ref14 => {
+    let {
+      id,
+      manifest,
+      state
+    } = _ref14;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Addon, {
+      key: id,
+      id: id,
+      settings: state,
+      manifest: manifest,
+      extended: extended
+    });
+  });
+};
 
 class AddonGroup extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
@@ -1983,10 +2022,11 @@ AddonGroup.propTypes = {
   extended: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool.isRequired
 };
 
-const addonToSearchItem = ({
-  id,
-  manifest
-}) => {
+const addonToSearchItem = _ref15 => {
+  let {
+    id,
+    manifest
+  } = _ref15;
   const texts = new Set();
 
   const addText = (score, text) => {
@@ -2047,9 +2087,12 @@ class AddonList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
   render() {
     if (this.props.search) {
-      const addons = this.search.search(this.props.search).slice(0, 20).map(({
-        index
-      }) => this.props.addons[index]);
+      const addons = this.search.search(this.props.search).slice(0, 20).map(_ref16 => {
+        let {
+          index
+        } = _ref16;
+        return this.props.addons[index];
+      });
 
       if (addons.length === 0) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2063,17 +2106,20 @@ class AddonList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       }));
     }
 
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, Object.entries(groupedAddons).map(([id, {
-      label,
-      addons,
-      open
-    }]) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddonGroup, {
-      key: id,
-      label: label,
-      open: open,
-      addons: addons.map(index => this.props.addons[index]),
-      extended: this.props.extended
-    })));
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, Object.entries(groupedAddons).map(_ref17 => {
+      let [id, {
+        label,
+        addons,
+        open
+      }] = _ref17;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddonGroup, {
+        key: id,
+        label: label,
+        open: open,
+        addons: addons.map(index => this.props.addons[index]),
+        extended: this.props.extended
+      });
+    }));
   }
 
 }
@@ -2279,15 +2325,21 @@ class AddonSettingsComponent extends react__WEBPACK_IMPORTED_MODULE_0___default.
   }
 
   render() {
-    const addonState = Object.entries(supportedAddons).map(([id, manifest]) => ({
-      id,
-      manifest,
-      state: this.state[id]
-    }));
-    const unsupported = Object.entries(unsupportedAddons).map(([id, manifest]) => ({
-      id,
-      manifest
-    }));
+    const addonState = Object.entries(supportedAddons).map(_ref18 => {
+      let [id, manifest] = _ref18;
+      return {
+        id,
+        manifest,
+        state: this.state[id]
+      };
+    });
+    const unsupported = Object.entries(unsupportedAddons).map(_ref19 => {
+      let [id, manifest] = _ref19;
+      return {
+        id,
+        manifest
+      };
+    });
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: _settings_css__WEBPACK_IMPORTED_MODULE_18___default.a.container
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -2364,7 +2416,7 @@ AddonSettingsComponent.propTypes = {
 /*! exports provided: ar, ca, cs, de, es, fi, fr, ga, he, hu, id, it, ja, ja-hira, ko, lt, nb, nl, pl, pt, pt-br, ro, ru, sl, sr, sv, th, tr, uk, vi, zh-cn, zh-tw, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"ar\":{\"credits\":\"الاعتمادات:\",\"reset\":\"إعادة تعيين\",\"resetAll\":\"إعادة ضبط الجميع\"},\"ca\":{\"addonFeedback\":\"Comentaris del addon\",\"confirmResetAll\":\"Segur que vols restablir tota la configuració del addon als valors predeterminats?\",\"credits\":\"Crèdits:\",\"dirty\":\"Torna a carregar les pestanyes per aplicar la configuració.\",\"dirtyButton\":\"Recarrega ara\",\"enableDangerous\":\"Aquest addon és perillós i pot DESACTIVAR les funcions intencionadament. La majoria dels usuaris NO HAN d'activar aquest addon. Estas segur que voleu activar-lo?\",\"export\":\"Exporta configurament\",\"groupDanger\":\"Perillós ({number})\",\"groupNew\":\"Nou ({number})\",\"groupOthers\":\"Altres ({number})\",\"import\":\"Importa configurament\",\"noCompiler\":\"Aquest addon només funciona quan el compilador està desactivat mitjançant el menú Avançat > Desactiva el compilador o utilitzant el addon \\\"Desactiva el compilador a l'editor\\\".\",\"noResults\":\"Cap resultat.\",\"presets\":\"Presets\",\"reset\":\"Restableix\",\"resetAll\":\"Restableix\",\"search\":\"Cerca\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perillos\",\"tagNew\":\"Nou!\",\"tagRecommended\":\"Recomanat\",\"tagTheme\":\"Tema\",\"title\":\"Configuració del addon\",\"unsupported\":\"Alguns addons no hi són disponibles en aquest navegador:\"},\"cs\":{\"addonFeedback\":\"Zpětná vazba doplňků\",\"confirmResetAll\":\"Jste si jisti, že chcete obnovit všechna nastavení doplňků na jejich výchozí hodnoty?\",\"credits\":\"Příspěvky:\",\"dirty\":\"Pro uložení nastavení obnovte stránku.\",\"dirtyButton\":\"Obnovte nyní\",\"enableDangerous\":\"Tento doplněk je nebezpečný a může úmyslně ZAKÁZAT funkce. Mnoho uživatelů by NEMĚLO tento doplněk povolovat. Jste si jisti, že to chcete povolit?\",\"export\":\"Exportovat nastavení\",\"groupDanger\":\"Nebezpečné ({number})\",\"groupNew\":\"Nové ({number})\",\"groupOthers\":\"Ostatní ({number})\",\"import\":\"Importovat nastavení\",\"noCompiler\":\"Tento doplněk funguje jen, když je kompilátor zakázán přes menu Pokročilé > Deaktivovat kompilátor nebo pomocí doplňku \\\"Zakázat kompilátor v editoru\\\".\",\"noResults\":\"Žádné výsledky.\",\"presets\":\"Šablony\",\"reset\":\"Obnovit\",\"resetAll\":\"Obnovit vše\",\"search\":\"Hledat\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nebezpečné\",\"tagNew\":\"Nové!\",\"tagRecommended\":\"Doporučeno\",\"tagTheme\":\"Téma\",\"title\":\"Nastavení doplňků\",\"unsupported\":\"Některé doplňky nejsou dostupné v tomto prohlížeči:\"},\"de\":{\"addonFeedback\":\"Feedback für Addons\",\"confirmResetAll\":\"Bist du sicher, dass du alle Addoneinstellungen auf ihre Standardwerte zurücksetzen willst?\",\"credits\":\"Danksagungen:\",\"dirty\":\"Lade die Tabs neu, um die Einstellungen anzuwenden.\",\"dirtyButton\":\"Jetzt neu laden\",\"enableDangerous\":\"Dieses Addon ist gefährlich und könnte gezielt Funktionen DEAKTIVIEREN. Die meisten Nutzer SOLLTEN NICHT dieses Addon aktivieren. Bist du sicher, dass du es willst?\",\"export\":\"Einstellungen Exportieren\",\"groupDanger\":\"Gefährlich ({number})\",\"groupNew\":\"Neu ({number})\",\"groupOthers\":\"Andere ({number})\",\"import\":\"Einstellungen Importieren\",\"noCompiler\":\"Dieses Addon funktioniert nur, wenn der Compiler über das \\\"Erweitert > Compiler ausschlten\\\"-Menü deaktiviert ist oder wenn das \\\"Disable compiler in editor\\\"-Addon aktiviert ist.\",\"noResults\":\"Keine Suchergebnisse.\",\"presets\":\"Voreinstellungen\",\"reset\":\"Zurücksetzen\",\"resetAll\":\"Alle zurücksetzen\",\"search\":\"Suchen\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Gefährlich\",\"tagNew\":\"Neu!\",\"tagRecommended\":\"Empfohlen\",\"tagTheme\":\"Design\",\"title\":\"Addon-Einstellungen\",\"unsupported\":\"Manche Addons sind in diesem Browser nicht verfügbar:\"},\"es\":{\"addonFeedback\":\"Enviar comentarios sobre addons\",\"confirmResetAll\":\"¿Está seguro de que quiere reiniciar todos los addons a sus valores predeterminados?\",\"credits\":\"Créditos:\",\"dirty\":\"Recargue las pestañas para aplicar la configuración.\",\"dirtyButton\":\"Recargar ahora\",\"enableDangerous\":\"Este addon es peligroso y podría intencionalmente DESACTIVAR funciones. La mayoría de los usuarios NO DEBERÍAN activar este addon. ¿Está seguro de que lo quiere activar?\",\"export\":\"Exportar ajustes\",\"groupDanger\":\"Peligrosos ({number})\",\"groupNew\":\"Nuevos ({number})\",\"groupOthers\":\"Otros ({number})\",\"import\":\"Importar ajustes\",\"noCompiler\":\"Este addon solo funciona cuando el compilador está desactivado en el menú Avanzado > Desactivar compilador o usando el addon «Deshabilitar compilador en editor».\",\"noResults\":\"Sin resultados.\",\"presets\":\"Presets\",\"reset\":\"Reiniciar\",\"resetAll\":\"Reiniciar todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Peligroso\",\"tagNew\":\"¡Nuevo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Ajustes de Addons\",\"unsupported\":\"Algunos addons no están disponibles en este navegador:\"},\"fi\":{\"addonFeedback\":\"Lisäosien Palaute\",\"confirmResetAll\":\"Oletko varma että haluat nollata kaikkien lisäosien asetukset oletukseen?\",\"credits\":\"Krediitit\",\"dirtyButton\":\"Lataa Sivu Uudelleen Nyt\",\"enableDangerous\":\"Tämä Lisäosa on vaarallinen ja saattaa tarkoituksella poistaa joitain ominaisuuksia käytöstä. useimpien käyttäjien EI PITÄISI Ottaa tätä lisäosaa käyttöön.Oletko varma että haluat sen käyttöön?\",\"export\":\"Tallenna Asetukset\",\"groupDanger\":\"Vaarallinen ( Yksi )\",\"groupNew\":\"{number}Uusi! ( Yksi ) \",\"groupOthers\":\"Muut (Yksi)\",\"import\":\"Tuo Asetukset\",\"noCompiler\":\"Tämä lisäosa toimii vain kun laatija on pois käytöstä,laatijan voi poistaa käytöstä Edistynyt Napista Sitten Paina Poista Laatija editorista lisäosa.\",\"noResults\":\"Ei Osumia\",\"presets\":\"Esiasetukset\",\"reset\":\"Resetoi\",\"resetAll\":\"Resetoi Kaikki\",\"search\":\"Etsi\",\"tagBeta\":\"Beta Ominaisuus\",\"tagDanger\":\"Vaarallinen\",\"tagNew\":\"Uusi!\",\"tagRecommended\":\"Suositeltu\",\"tagTheme\":\"Teema\",\"title\":\"Lisäosien Asetukset\",\"unsupported\":\"Jotkut Lisäosat eivät toimi tässä selaimessa:\"},\"fr\":{\"addonFeedback\":\"Commentaires sur les addons\",\"confirmResetAll\":\"Êtes-vous sûr de vouloir réinitialiser tous les paramètres des addons à leurs valeurs par défaut?\",\"credits\":\"Crédits:\",\"dirty\":\"Rechargez les onglets pour appliquer les paramètres.\",\"dirtyButton\":\"Recharger maintenant\",\"enableDangerous\":\"Cet addon est dangereux et va intentionnellement DÉSACTIVER certaines fonctionnalitées. La plupart des utilisateurs NE DOIVENT PAS activer cet addon. Êtes-vous sûr de vouloir l'activer ?\",\"export\":\"Exporter les paramètres\",\"groupDanger\":\"Dangereux ({number})\",\"groupNew\":\"New ({number})\",\"groupOthers\":\"Autres ({number})\",\"import\":\"Importer les paramètres\",\"noCompiler\":\"Cet addon ne fonctionne que lorsque le compilateur est désactivé via le menu Avancé > Désactiver le compilateur ou en utilisant l'addon \\\"Désactiver le compilateur dans l'éditeur\\\".\",\"noResults\":\"Aucun résultat\",\"presets\":\"Préconfigurations\",\"reset\":\"Réinitialiser\",\"resetAll\":\"Tout réinitialiser\",\"search\":\"Rechercher\",\"tagBeta\":\"Bêta\",\"tagDanger\":\"Dangereux\",\"tagNew\":\"Nouveau!\",\"tagRecommended\":\"Recommandé\",\"tagTheme\":\"Thème\",\"title\":\"Paramètres des addons\",\"unsupported\":\"Les addons suivants ne sont pas pris en charge par votre navigateur\"},\"ga\":{\"title\":\"socruithe addon\"},\"he\":{\"credits\":\"נקודות זכות:\",\"reset\":\"אִתחוּל\",\"resetAll\":\"לאפס הכל\",\"tagBeta\":\"בטא\",\"tagNew\":\"חָדָשׁ!\"},\"hu\":{\"reset\":\"Visszaállítás\"},\"id\":{\"export\":\"Pengaturan Export\",\"import\":\"Pengaturan Import\",\"reset\":\"Mengatur Ulang \",\"search\":\"Cari\",\"tagRecommended\":\"Di Rekomendasikan\"},\"it\":{\"addonFeedback\":\"Feedback sull'Addon\",\"confirmResetAll\":\"Sei sicuro di voler riportare tutte le impostazioni dell'addon al loro stato iniziale?\",\"credits\":\"Autore/i:\",\"dirty\":\"Ricarica le schede del browser per applicare le nuove impostazioni.\",\"dirtyButton\":\"Ricarica ora\",\"enableDangerous\":\"Questo addon è pericoloso e può intenzionalmente DISABILITARE delle funzionalità. La maggior parte degli utenti NON DOVREBBE abilitare questo addon. Sei sicuro di volerlo abilitare?\",\"export\":\"Esporta le impostazioni\",\"groupDanger\":\"Pericolosi ({number})\",\"groupNew\":\"Nuovi ({number})\",\"groupOthers\":\"Altri ({number})\",\"import\":\"Importa le impostazioni\",\"noCompiler\":\"Questo addon funziona soltanto quando il compilatore è disabilitato usando il menu Impostazioni Avanzate > Disabilita Compilatore o l'addon \\\"Disabilita il compilatore nell'editor\\\".\",\"noResults\":\"Nessun risultato.\",\"presets\":\"Valori predefiniti\",\"reset\":\"Resetta\",\"resetAll\":\"Resetta tutto\",\"search\":\"Cerca\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Pericoloso\",\"tagNew\":\"Nuovo!\",\"tagRecommended\":\"Raccomandato\",\"tagTheme\":\"Tema\",\"title\":\"Impostazioni Addon\",\"unsupported\":\"Alcuni addon non sono disponibili in questo browser:\"},\"ja\":{\"addonFeedback\":\"アドオンのフィードバック\",\"confirmResetAll\":\"アドオンの設定を削除し、デフォルトに戻します。よろしいですか？\",\"credits\":\"クレジット:\",\"dirty\":\"タブを再読み込みして設定を適用します\",\"dirtyButton\":\"すぐに再読み込みする\",\"enableDangerous\":\"このアドオンは危険で、意図的に機能を無効にする可能性があります。多くのユーザーは、このアドオンを有効にすべきではありません。本当に有効にしていいですか？\",\"export\":\"設定を保存する\",\"groupDanger\":\"危険({number})\",\"groupNew\":\"新機能({number})\",\"groupOthers\":\"その他({number})\",\"import\":\"設定を読み込む\",\"noCompiler\":\"このアドオンは、「高度な設定」→「コンパイラを無効にする」、またはアドオンの「エディタでコンパイラを無効にする」を使用してコンパイラを無効にしたときのみ機能します。\",\"noResults\":\"検索条件に一致する結果はありません。\",\"presets\":\"プリセット\",\"reset\":\"リセット\",\"resetAll\":\"全てリセットする\",\"search\":\"検索\",\"tagBeta\":\"ベータ版\",\"tagDanger\":\"危険\",\"tagNew\":\"新機能!\",\"tagRecommended\":\"おすすめ\",\"tagTheme\":\"テーマ\",\"title\":\"アドオン設定\",\"unsupported\":\"いくつかのアドオンがお使いのブラウザに対応していません:\"},\"ja-hira\":{\"addonFeedback\":\"アドオンのフィードバック\",\"confirmResetAll\":\"アドオンのせっていを削除(さくじょ)し、デフォルトにもどします。よろしいですか？\",\"credits\":\"クレジット:\",\"dirtyButton\":\"すぐに再読み込み(さいよみこみ)する\",\"export\":\"設定(せってい)を保存(ほぞん)する\",\"groupDanger\":\"きけん({number})\",\"groupNew\":\"しんきのう({number})\",\"groupOthers\":\"そのた({number})\",\"import\":\"設定(せってい)をよみこむ\",\"noResults\":\"検索条件(けんさくじょうけん)に一致(いっち)する結果(けっか)はありません。\",\"presets\":\"プリセット\",\"reset\":\"リセット\",\"resetAll\":\"すべてリセットする\",\"search\":\"けんさく\",\"tagBeta\":\"ベータばん\",\"tagDanger\":\"きけん\",\"tagNew\":\"しんきのう!\",\"tagRecommended\":\"おすすめ\",\"tagTheme\":\"テーマ\",\"title\":\"アドオンせってい\",\"unsupported\":\"いくつかのアドオンがおつかいのブラウザに対応(たいおう)していません:\"},\"ko\":{\"addonFeedback\":\"애드온 피드백하기\",\"confirmResetAll\":\"정말로 애드온 설정을 기본값으로 초기화하시겠습니까?\",\"credits\":\"도움을 준 사람들 :\",\"dirtyButton\":\"즉시 재시작\",\"enableDangerous\":\"이 애드온은 위험하며 의도적으로 몇몇 기능을 비활성화할 수도 있습니다. 대부분의 사용자들은 이 애드온을 활성화 해서는 안됩니다. 정말로 활성화 하시겠습니까?\",\"export\":\"설정 내보내기\",\"groupDanger\":\"위험한 기능 ({number})\",\"groupNew\":\"새 기능 ({number})\",\"groupOthers\":\"기타 ({number})\",\"import\":\"설정 가져오기\",\"noCompiler\":\"이 애드온은 메뉴에서 고급 설정 > 컴파일러 비활성화 또는 \\\"에디터에서 컴파일러 비활성화\\\" 애드온을 통해서 컴파일러가 비활성화 되었을 때에만 작동합니다.\",\"noResults\":\"결과가 없습니다.\",\"presets\":\"프리셋\",\"reset\":\"초기화\",\"resetAll\":\"모두 초기화\",\"search\":\"검색\",\"tagBeta\":\"베타\",\"tagDanger\":\"위험한 기능\",\"tagNew\":\"새 기능!\",\"tagRecommended\":\"추천\",\"tagTheme\":\"테마\",\"title\":\"애드온 설정\",\"unsupported\":\"몇몇 애드온은 다음 브라우저에서 사용할 수 없습니다 :\"},\"lt\":{\"addonFeedback\":\"Įskiepių atsiliepimas\",\"confirmResetAll\":\"Ar jūs tikras kad norite nustatyti visus įskiepių nustatymus į jų numatytąsias vertes?\",\"credits\":\"Padėkos:\",\"dirty\":\"Perkrauk skirtukus nustatymų pritaikymui.\",\"dirtyButton\":\"Perkrauti dabar\",\"enableDangerous\":\"Šis įskiepis yra pavojingas ir gali tyčia IŠJUNGTI funkcijas. Dauguma naudotojų NETURĖTŲ įjungti šio priedo. Ar tikrai norite jį įjungti?\",\"export\":\"Eksportuoti nustatymus\",\"groupDanger\":\"Pavojingi ({number})\",\"groupNew\":\"Nauji ({number})\",\"groupOthers\":\"Kiti ({number})\",\"import\":\"Importuoti nustatymus\",\"noCompiler\":\"Šis priedas veikia tik tada, kai kompiliatorius išjungtas per meniu Išplėstinė > Išjungti kompiliatorių arba naudojant įskiepį \\\"Išjungti kompiliatorių redaktoriuje\\\".\",\"noResults\":\"Jokių rezultatų.\",\"presets\":\"Iš anksto nustatyti\",\"reset\":\"nustatyti iš naujo\",\"resetAll\":\"nustatyti viską iš naujo\",\"search\":\"Ieškoti\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Pavojingas\",\"tagNew\":\"Naujiena!\",\"tagRecommended\":\"Rekomenduotas\",\"tagTheme\":\"Fonas\",\"title\":\"Įskiepių nustatymai\",\"unsupported\":\"Keletas įskiepių yra nepalaikomi šioje naršyklėje:\"},\"nb\":{\"addonFeedback\":\"Utvidelse tilbakemelding\",\"confirmResetAll\":\"Er du sikkert at du vil tilbakestill alle utvidelser?\",\"credits\":\"Fra:\",\"dirtyButton\":\"Oppdater siden nå\",\"export\":\"Eksportinnstillinger\",\"import\":\"Importinnstillinger\",\"noResults\":\"Ingen resultater.\",\"reset\":\"Tilbakestill\",\"resetAll\":\"Tilbakestill alt\",\"search\":\"Søk\",\"tagBeta\":\"Beta\",\"tagNew\":\"Ny!\",\"tagRecommended\":\"Anbefalt\",\"tagTheme\":\"Tema\",\"title\":\"Innstillinger for utvidelser\",\"unsupported\":\"Noen utvidelser er ikke tilgjengelig på dette nettleser.\"},\"nl\":{\"addonFeedback\":\"Addonfeedback\",\"confirmResetAll\":\"Weet je zeker dat je alle addonsinstellingen wilt resetten naar hun standaardinstellingen?\",\"credits\":\"Dank aan:\",\"dirty\":\"Tabbladen verversen om instellingen toe te passen.\",\"dirtyButton\":\"Verversen\",\"enableDangerous\":\"Deze addon is gevaarlijk en kan opzettelijk functies UITSCHAKELEN. De meeste gebruikers zouden deze addon NIET moeten inschakelen. Weet je zeker dat je het wilt inschakelen?\",\"export\":\"Instellingen exporteren\",\"groupDanger\":\"Gevaarlijk ({number})\",\"groupNew\":\"Nieuw ({number})\",\"groupOthers\":\"Anderen ({number})\",\"import\":\"Instellingen importeren\",\"noCompiler\":\"Deze addon werkt alleen als de compiler is uitgezet, dit kun je doen in Geavanceerd > Compiler Uitzetten of door de \\\"Compiler uitzetten in editor\\\"-addon.\",\"noResults\":\"Geen resultaten.\",\"presets\":\"Voorinstellingen\",\"reset\":\"Reset\",\"resetAll\":\"Alles resetten\",\"search\":\"Zoek\",\"tagBeta\":\"Bèta\",\"tagDanger\":\"Gevaarlijk\",\"tagNew\":\"Nieuw!\",\"tagRecommended\":\"Aanbevolen\",\"tagTheme\":\"Thema\",\"title\":\"Addonsinstellingen\",\"unsupported\":\"Sommige addons zijn niet beschikbaar in deze browser:\"},\"pl\":{\"addonFeedback\":\"Opinia o dodatkach\",\"confirmResetAll\":\"Jesteś pewien, że chcesz zresetować wszystkie dodatki do ich domyślnych wartości?\",\"credits\":\"Kredyty:\",\"dirty\":\"Odśwież karty, aby załączyć ustawienia.\",\"dirtyButton\":\"Odśwież teraz\",\"enableDangerous\":\"Ten dodatek jest niebezpieczny i może intencjonalnie WYŁĄCZYĆ funkcje. Większość użytkowników NIE POWINNA włączać tego dodatku. Czy jesteś pewien, że chcesz go włączyć?\",\"export\":\"Eksportuj ustawienia\",\"groupDanger\":\"Niebezpieczne({number})\",\"groupNew\":\"Nowe({number})\",\"groupOthers\":\"Inne({number})\",\"import\":\"Importuj ustawienia\",\"noCompiler\":\"Ten dodatek działa tylko kiedy kompiler jest wyłączony poprzez Zaawansowane Ustawienia > Wyłącz Kompiler albo używając dodatku \\\"Wyłącz kompiler w edytorze\\\".\",\"noResults\":\"Brak wyników.\",\"presets\":\"Ustawienia wstępne\",\"reset\":\"Resetuj\",\"resetAll\":\"Resetuj wszystko\",\"search\":\"Szukaj\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Niebezpieczne\",\"tagNew\":\"Nowość!\",\"tagRecommended\":\"Polecane\",\"tagTheme\":\"Motyw\",\"title\":\"Ustawienia Dodatków\",\"unsupported\":\"Niektóre dodatki nie są dostępne w tej przeglądarce:\"},\"pt\":{\"addonFeedback\":\"Dar Feedback sobre Addons\",\"confirmResetAll\":\"Tem certeza que quer restaurar todas as configurações de addons aos seus valores originais?\",\"credits\":\"Créditos:\",\"dirtyButton\":\"Recarregar agora\",\"enableDangerous\":\"Este addon é perigoso e pode intencionalmente DESATIVAR funcionalidades. A maioria dos usuários NÃO DEVEM ativar este addon. Tem certeza que quer ativá-lo?\",\"export\":\"Exportar configurações\",\"groupDanger\":\"Perigosos ({number})\",\"groupNew\":\"Novos ({number})\",\"groupOthers\":\"Outros ({number})\",\"import\":\"Importar configurações\",\"noCompiler\":\"Esse addon apenas funciona com o compilador desligado, o que pode ser feito através do menu Avançado > Desligar Compilador ou usando o addon \\\"Desabilitar compilador no editor\\\".\",\"noResults\":\"Nenhum resultado.\",\"presets\":\"Predefinições\",\"reset\":\"Redefinir\",\"resetAll\":\"Redefinir todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perigoso\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Configurações de Addon\",\"unsupported\":\"Alguns addons não estão disponíveis neste navegador:\"},\"pt-br\":{\"addonFeedback\":\"Dar Feedback sobre Addons\",\"confirmResetAll\":\"Tem certeza que quer restaurar todas as configurações de addons aos seus valores originais?\",\"credits\":\"Créditos:\",\"dirty\":\"Recarregue a página para aplicar as opções.\",\"dirtyButton\":\"Recarregar agora\",\"enableDangerous\":\"Este addon é perigoso e pode intencionalmente DESATIVAR funcionalidades. A maioria dos usuários NÃO DEVEM ativar este addon. Tem certeza que quer ativá-lo?\",\"export\":\"Exportar configurações\",\"groupDanger\":\"Perigosos ({number})\",\"groupNew\":\"Novos ({number})\",\"groupOthers\":\"Outros ({number})\",\"import\":\"Importar configurações\",\"noCompiler\":\"Esse addon apenas funciona com o compilador desligado, o que pode ser feito através do menu Avançado > Desligar Compilador ou usando o addon \\\"Desabilitar compilador no editor\\\".\",\"noResults\":\"Nenhum resultado.\",\"presets\":\"Predefinições\",\"reset\":\"Redefinir\",\"resetAll\":\"Redefinir todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perigoso\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Configurações de Addon\",\"unsupported\":\"Alguns addons não estão disponíveis neste navegador:\"},\"ro\":{\"addonFeedback\":\"Spune-ți Părerea despre Extensii\",\"confirmResetAll\":\"Ești sigur că vrei să resetezi toate setările extensiilor la valorile lor implicite?\",\"credits\":\"Credite:\",\"dirtyButton\":\"Reîncarcă acum\",\"export\":\"Exportă setările\",\"import\":\"Importă setările\",\"noResults\":\"Niciun rezultat.\",\"presets\":\"Presetări\",\"reset\":\"Resetează\",\"resetAll\":\"Resetează toate\",\"search\":\"Caută\",\"tagBeta\":\"Beta\",\"tagRecommended\":\"Recomandat\",\"title\":\"Setările Addon-urilor\",\"unsupported\":\"Unele extensii nu sunt disponibile în acest browser:\"},\"ru\":{\"addonFeedback\":\"Отзывы о дополнениях\",\"confirmResetAll\":\"Вы уверены, что хотите сбросить настройки всех дополнений до значений по умолчанию?\",\"credits\":\"Благодарности:\",\"dirty\":\"Перезагрузите вкладки, чтобы применить настройки.\",\"dirtyButton\":\"Перезагрузить сейчас\",\"enableDangerous\":\"Этот аддон опасен и может намеренно ОТКЛЮЧИТЬ функции. Большинству пользователей НЕ СЛЕДУЕТ включать этот аддон. Вы уверены, что хотите его включить?\",\"export\":\"Экспорт настроек\",\"groupDanger\":\"Опасное ({number})\",\"groupNew\":\"Новое ({number})\",\"groupOthers\":\"Прочее ({number})\",\"import\":\"Импорт настроек\",\"noCompiler\":\"Этот аддон работает только когда компилятор отключен через меню Дополнительно > Отключить Компилятор или при помощи аддона \\\"Отключение компилятора в редакторе\\\"\",\"noResults\":\"Нет результатов.\",\"presets\":\"Предустановки\",\"reset\":\"Сбросить\",\"resetAll\":\"Сбросить всё\",\"search\":\"Поиск\",\"tagBeta\":\"Бета\",\"tagDanger\":\"Опасное\",\"tagNew\":\"Новое!\",\"tagRecommended\":\"Рекомендованно\",\"tagTheme\":\"Тема\",\"title\":\"Настройки аддонов\",\"unsupported\":\"Некоторые дополнения не доступны в данном браузере:\"},\"sl\":{\"addonFeedback\":\"Povratne informacije o dodatkih\",\"confirmResetAll\":\"Ste prepričani, da želite ponastaviti vse nastavitve dodatkov?\",\"credits\":\"Hvala:\",\"dirty\":\"Znova naložite zavihke, da uporabite spremenjene nastavitve.\",\"dirtyButton\":\"Znova naloži zdaj\",\"enableDangerous\":\"Ta dodatek je nevaren in morda namenoma ODSTRANI funkcije. Večina uporabnikov tega dodatka NE POTREBUJE. Ste prepričani, da ga želite vključiti?\",\"export\":\"Izvozi nastavitve\",\"groupDanger\":\"Nevarno ({number})\",\"groupNew\":\"Novo ({number})\",\"groupOthers\":\"Drugo ({number})\",\"import\":\"Uvozi nastavitve\",\"noCompiler\":\"Ta dodatek deluje samo, če je prevajalnik izključen v meniju Napredno > Onemogoči prevajalnik ali z dodatkom \\\"Disable compiler in editor\\\".\",\"noResults\":\"Ni rezultatov.\",\"presets\":\"Prednastavitve\",\"reset\":\"Ponastavi\",\"resetAll\":\"Ponastavi vse\",\"search\":\"Iskanje\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nevarno\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Priporočeno\",\"tagTheme\":\"Tema\",\"title\":\"Nastavitve dodatkov\",\"unsupported\":\"Nekateri dodatki v tem brskalniku niso na voljo:\"},\"sr\":{\"addonFeedback\":\"Повратне информације о додацима\",\"confirmResetAll\":\"Да ли сте сигурни да желите да ресетујете сва подешавања додатака?\",\"credits\":\"Заслуге:\",\"dirtyButton\":\"Понов учитај\",\"enableDangerous\":\"Овај додатак је опасан и може намерно ОНЕМОГУЋИТИ функције. Већина корисника НЕ ТРЕБА користити овај додатак. Да ли сте сигурни да га желите укључити?\",\"export\":\"Извези подешавања\",\"groupDanger\":\"Опасно ({number})\",\"groupNew\":\"Ново ({number})\",\"groupOthers\":\"Остало ({number})\",\"import\":\"Увези подешавања\",\"noCompiler\":\"Овај додатак ради само кад је преводилац кода онемогућен кроз мени Напредно > Онемогући преводилац кода или користећи додатак \\\"Онемогући преводилац кода у едитору\\\".\",\"noResults\":\"Нема резултата.\",\"presets\":\"Унапред подешена подешавања\",\"reset\":\"Ресетуј\",\"resetAll\":\"Ресетуј све\",\"search\":\"Претражи\",\"tagBeta\":\"Бета\",\"tagDanger\":\"Опасно\",\"tagNew\":\"Ново!\",\"tagRecommended\":\"Препоручено\",\"tagTheme\":\"Тема\",\"title\":\"Подешавања додатака\",\"unsupported\":\"Неки додаци нису доступни у овом прегледачу:\"},\"sv\":{\"addonFeedback\":\"Tilläggsrespons\",\"confirmResetAll\":\"Är du säker på att du vill återställa alla tilläggsinställningar till standardvärdena?\",\"credits\":\"kreditera:\",\"dirtyButton\":\"Ladda om nu\",\"export\":\"Exportera inställningar\",\"import\":\"Importera inställningar\",\"noResults\":\"Inga resutat\",\"presets\":\"Förinställningar\",\"reset\":\"Starta om\",\"resetAll\":\"Starta om allt\",\"search\":\"Sök\",\"tagBeta\":\"Beta\",\"tagNew\":\"Nytt!\",\"tagRecommended\":\"Rekomenderat\",\"tagTheme\":\"Tema\",\"title\":\"Tilläggsinställningar\",\"unsupported\":\"Vissa tillägg är inte tillgängliga i den här webbläsaren:\"},\"th\":{\"addonFeedback\":\"ความคิดเห็น Addon\",\"confirmResetAll\":\"คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตการตั้งค่า Addons กลับไปเป็นการตั้งค่าเริ่มต้น\",\"credits\":\"เครดิต :\",\"dirtyButton\":\"แตะเพื่อรีโหลด\",\"export\":\"Export การตั้งค่า\",\"import\":\"Import การตั้งค่า\",\"noResults\":\"ไม่พบข้อมูล\",\"presets\":\"Presets\",\"reset\":\"รีเซ็ต\",\"resetAll\":\"รีเซ็ตทั้งหมด\",\"search\":\"ค้นหา\",\"tagBeta\":\"อยู่ระหว่างการพัฒนาระบบ\",\"tagNew\":\"ใหม่\",\"tagRecommended\":\"คำแนะนำ\",\"tagTheme\":\"ธีม\",\"title\":\"การตั้งค่า Addons\",\"unsupported\":\"Addon บางอย่างยังไม่ได้รับการสนับสนุนในบราวเซอร์นี้\"},\"tr\":{\"addonFeedback\":\"Eklenti geribildirim\",\"confirmResetAll\":\"Bütün eklenti ayarlarını varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?\",\"credits\":\"Krediler:\",\"dirtyButton\":\"Şimdi yeniden yükle\",\"enableDangerous\":\"Bu eklenti tehlikelidir ve bilerek özellikleri DEVRE DIŞI BIRAKABİLİR. Çoğu kullanıcı bu eklentiyi ETKİNLEŞTİRMEMELİDİR. Etkinleştirmek istediğinizden emin misiniz?\",\"export\":\"Dışarıya aktarmak ayarları\",\"groupDanger\":\"Tehlikeli ({number})\",\"groupNew\":\"Yeni ({number})\",\"groupOthers\":\"Diğerler ({number})\",\"import\":\"İçeri aktarmak ayarları\",\"noCompiler\":\"Bu eklenti sadece derleyiciyi Gelişmiş > Derlemeyi Kapat yada Derlemeyi editörde kapat eklenti ile kapatırsan\",\"noResults\":\"Sonuçlar yok.\",\"presets\":\"Varsayılan ayarları\",\"reset\":\"Sıfırla\",\"resetAll\":\"Her şeyi sıfırla\",\"search\":\"Arama\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Tehlikeli\",\"tagNew\":\"Yeni!\",\"tagRecommended\":\"Önerildi\",\"tagTheme\":\"Tema\",\"title\":\"Eklenti Ayarları\",\"unsupported\":\"Bazı eklentiler bu tarayıcıda kullanılamıyor:\"},\"uk\":{\"addonFeedback\":\"Відгук про доповнення\",\"confirmResetAll\":\"Ви впевнені, що хочете скинути усі налаштування доповненнь до їхніх значеннь за замовчуванням?\",\"credits\":\"Подяка:\",\"dirty\":\"Перезавантажте вкладки щоб застосувати налаштування.\",\"dirtyButton\":\"Перезавантажити зараз\",\"enableDangerous\":\"Це доповнення небезпечне та може навмисно ВИМИКАТИ деякі функції. Деяким користувачам НЕ СЛІД вмикати цю функцію. Ви дійсно хочите увімкнути це?\",\"export\":\"Експортувати налаштування\",\"groupDanger\":\"Небезпечні ({number})\",\"groupNew\":\"Нове ({number})\",\"groupOthers\":\"Інші ({number})\",\"import\":\"Імпортувати налаштування\",\"noCompiler\":\"Це доповнення працює тільки тоді, коли компілятор вимкнено, вимкніть компілятор в меню \\\"Додатково\\\" або використовуйте доповнення \\\"Вимкнути компілятор в редакторі\\\".\",\"noResults\":\"Немає результатів.\",\"presets\":\"Попередні налаштування\",\"reset\":\"Скинути\",\"resetAll\":\"Скинути все\",\"search\":\"Пошук\",\"tagBeta\":\"У розробці\",\"tagDanger\":\"Небезпечно\",\"tagNew\":\"Нове!\",\"tagRecommended\":\"Рекомендовано\",\"tagTheme\":\"Тема\",\"title\":\"Налаштування доповненнь\",\"unsupported\":\"Деякі доповнення не доступні у цьому браузері:\"},\"vi\":{\"addonFeedback\":\"Phản hồi\",\"confirmResetAll\":\"Bạn có chắc khi chỉnh lại tất cả các cài đặt addon về giá trị mặc định không?\",\"credits\":\"Tác giả:\",\"dirtyButton\":\"Tải lại ngay bây giờ\",\"enableDangerous\":\"Addon này nguy hiểm và có thể cố ý VÔ HIỆU HOÁ các tính năng. Hầu hết người dùng KHÔNG NÊN bật addon này. Bạn có chắc khi bật addon này chứ?\",\"export\":\"Xuất cài đặt\",\"groupDanger\":\"Nguy hiểm ({number})\",\"groupNew\":\"Mới ({number})\",\"groupOthers\":\"Còn lại ({number})\",\"import\":\"Tải lên cài đặt\",\"noResults\":\"Không có kết quả.\",\"presets\":\"Cài đặt cho trước\",\"reset\":\"Cài Đặt Lại\",\"resetAll\":\"Cài Đặt lại tất cả\",\"search\":\"Tìm kiếm\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nguy hiểm\",\"tagNew\":\"Mới!\",\"tagRecommended\":\"Khuyên dùng\",\"tagTheme\":\"Chủ đề\",\"title\":\"Cài Đặt Addon\",\"unsupported\":\"Một vài addons không khả dụng ở trong trình duệt này:\"},\"zh-cn\":{\"addonFeedback\":\"插件反馈\",\"confirmResetAll\":\"你确定要将所有插件设置重置为默认值吗？\",\"credits\":\"鸣谢：\",\"dirty\":\"重新加载选项卡以应用设置。\",\"dirtyButton\":\"重新加载\",\"enableDangerous\":\"此插件存在潜在的风险，可能会禁用某些功能。大多数用户不应启用此加载项。您确定要启用它吗？\",\"export\":\"导出设置\",\"groupDanger\":\"危险（{number}）\",\"groupNew\":\"最新（{number}）\",\"groupOthers\":\"其他（{number}）\",\"import\":\"导入设置\",\"noCompiler\":\"这个插件只有在通过高级 > 禁用编译器选项或使用\\\"在编辑器中禁用编译器\\\"插件禁用编译器的情况下才能工作。\",\"noResults\":\"没有相符的结果。\",\"presets\":\"预设\",\"reset\":\"重置\",\"resetAll\":\"全部重置\",\"search\":\"搜索\",\"tagBeta\":\"测试\",\"tagDanger\":\"危险\",\"tagNew\":\"最新\",\"tagRecommended\":\"推荐\",\"tagTheme\":\"外观\",\"title\":\"插件设置\",\"unsupported\":\"某些插件在此浏览器中不可用：\"},\"zh-tw\":{\"addonFeedback\":\"附加元件回饋\",\"confirmResetAll\":\"你確定要重設所有附件設定？\",\"credits\":\"感謝：\",\"dirtyButton\":\"重新載入\",\"export\":\"匯出設定\",\"groupDanger\":\"危險（{number}）\",\"groupNew\":\"全新（{number}）\",\"groupOthers\":\"其他（{number}）\",\"import\":\"匯入設定\",\"noResults\":\"沒有相符的結果。\",\"presets\":\"預設\",\"reset\":\"重設\",\"resetAll\":\"全部重設\",\"search\":\"搜尋……\",\"tagBeta\":\"測試\",\"tagDanger\":\"危險\",\"tagNew\":\"全新\",\"tagRecommended\":\"推薦\",\"tagTheme\":\"外觀\",\"title\":\"附件設定\",\"unsupported\":\"下列附加元件在此瀏覽器不可用：\"}}");
+module.exports = JSON.parse("{\"ar\":{\"credits\":\"الاعتمادات:\",\"reset\":\"إعادة تعيين\",\"resetAll\":\"إعادة ضبط الجميع\"},\"ca\":{\"addonFeedback\":\"Comentaris del addon\",\"confirmResetAll\":\"Segur que vols restablir tota la configuració del addon als valors predeterminats?\",\"credits\":\"Crèdits:\",\"dirty\":\"Torna a carregar les pestanyes per aplicar la configuració.\",\"dirtyButton\":\"Recarrega ara\",\"enableDangerous\":\"Aquest addon és perillós i pot DESACTIVAR les funcions intencionadament. La majoria dels usuaris NO HAN d'activar aquest addon. Estas segur que voleu activar-lo?\",\"export\":\"Exporta configurament\",\"groupDanger\":\"Perillós ({number})\",\"groupNew\":\"Nou ({number})\",\"groupOthers\":\"Altres ({number})\",\"import\":\"Importa configurament\",\"noCompiler\":\"Aquest addon només funciona quan el compilador està desactivat mitjançant el menú Avançat > Desactiva el compilador o utilitzant el addon \\\"Desactiva el compilador a l'editor\\\".\",\"noResults\":\"Cap resultat.\",\"presets\":\"Presets\",\"reset\":\"Restableix\",\"resetAll\":\"Restableix\",\"search\":\"Cerca\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perillos\",\"tagNew\":\"Nou!\",\"tagRecommended\":\"Recomanat\",\"tagTheme\":\"Tema\",\"title\":\"Configuració del addon\",\"unsupported\":\"Alguns addons no hi són disponibles en aquest navegador:\"},\"cs\":{\"addonFeedback\":\"Zpětná vazba doplňků\",\"confirmResetAll\":\"Jste si jisti, že chcete obnovit všechna nastavení doplňků na jejich výchozí hodnoty?\",\"credits\":\"Příspěvky:\",\"dirty\":\"Pro uložení nastavení obnovte stránku.\",\"dirtyButton\":\"Obnovte nyní\",\"enableDangerous\":\"Tento doplněk je nebezpečný a může úmyslně ZAKÁZAT funkce. Mnoho uživatelů by NEMĚLO tento doplněk povolovat. Jste si jisti, že to chcete povolit?\",\"export\":\"Exportovat nastavení\",\"groupDanger\":\"Nebezpečné ({number})\",\"groupNew\":\"Nové ({number})\",\"groupOthers\":\"Ostatní ({number})\",\"import\":\"Importovat nastavení\",\"noCompiler\":\"Tento doplněk funguje jen, když je kompilátor zakázán přes menu Pokročilé > Deaktivovat kompilátor nebo pomocí doplňku \\\"Zakázat kompilátor v editoru\\\".\",\"noResults\":\"Žádné výsledky.\",\"presets\":\"Šablony\",\"reset\":\"Obnovit\",\"resetAll\":\"Obnovit vše\",\"search\":\"Hledat\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nebezpečné\",\"tagNew\":\"Nové!\",\"tagRecommended\":\"Doporučeno\",\"tagTheme\":\"Téma\",\"title\":\"Nastavení doplňků\",\"unsupported\":\"Některé doplňky nejsou dostupné v tomto prohlížeči:\"},\"de\":{\"addonFeedback\":\"Feedback für Addons\",\"confirmResetAll\":\"Bist du sicher, dass du alle Addoneinstellungen auf ihre Standardwerte zurücksetzen willst?\",\"credits\":\"Danksagungen:\",\"dirty\":\"Lade die Tabs neu, um die Einstellungen anzuwenden.\",\"dirtyButton\":\"Jetzt neu laden\",\"enableDangerous\":\"Dieses Addon ist gefährlich und könnte gezielt Funktionen DEAKTIVIEREN. Die meisten Nutzer SOLLTEN NICHT dieses Addon aktivieren. Bist du sicher, dass du es willst?\",\"export\":\"Einstellungen Exportieren\",\"groupDanger\":\"Gefährlich ({number})\",\"groupNew\":\"Neu ({number})\",\"groupOthers\":\"Andere ({number})\",\"import\":\"Einstellungen Importieren\",\"noCompiler\":\"Dieses Addon funktioniert nur, wenn der Compiler über das \\\"Erweitert > Compiler ausschlten\\\"-Menü deaktiviert ist oder wenn das \\\"Disable compiler in editor\\\"-Addon aktiviert ist.\",\"noResults\":\"Keine Suchergebnisse.\",\"presets\":\"Voreinstellungen\",\"reset\":\"Zurücksetzen\",\"resetAll\":\"Alle zurücksetzen\",\"search\":\"Suchen\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Gefährlich\",\"tagNew\":\"Neu!\",\"tagRecommended\":\"Empfohlen\",\"tagTheme\":\"Design\",\"title\":\"Addon-Einstellungen\",\"unsupported\":\"Manche Addons sind in diesem Browser nicht verfügbar:\"},\"es\":{\"addonFeedback\":\"Enviar comentarios sobre addons\",\"confirmResetAll\":\"¿Está seguro de que quiere reiniciar todos los addons a sus valores predeterminados?\",\"credits\":\"Créditos:\",\"dirty\":\"Recargue las pestañas para aplicar la configuración.\",\"dirtyButton\":\"Recargar ahora\",\"enableDangerous\":\"Este addon es peligroso y podría intencionalmente DESACTIVAR funciones. La mayoría de los usuarios NO DEBERÍAN activar este addon. ¿Está seguro de que lo quiere activar?\",\"export\":\"Exportar ajustes\",\"groupDanger\":\"Peligrosos ({number})\",\"groupNew\":\"Nuevos ({number})\",\"groupOthers\":\"Otros ({number})\",\"import\":\"Importar ajustes\",\"noCompiler\":\"Este addon solo funciona cuando el compilador está desactivado en el menú Avanzado > Desactivar compilador o usando el addon «Deshabilitar compilador en editor».\",\"noResults\":\"Sin resultados.\",\"presets\":\"Presets\",\"reset\":\"Reiniciar\",\"resetAll\":\"Reiniciar todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Peligroso\",\"tagNew\":\"¡Nuevo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Ajustes de Addons\",\"unsupported\":\"Algunos addons no están disponibles en este navegador:\"},\"fi\":{\"addonFeedback\":\"Lisäosien Palaute\",\"confirmResetAll\":\"Oletko varma että haluat nollata kaikkien lisäosien asetukset oletukseen?\",\"credits\":\"Krediitit\",\"dirtyButton\":\"Lataa Sivu Uudelleen Nyt\",\"enableDangerous\":\"Tämä Lisäosa on vaarallinen ja saattaa tarkoituksella poistaa joitain ominaisuuksia käytöstä. useimpien käyttäjien EI PITÄISI Ottaa tätä lisäosaa käyttöön.Oletko varma että haluat sen käyttöön?\",\"export\":\"Tallenna Asetukset\",\"groupDanger\":\"Vaarallinen ( Yksi )\",\"groupNew\":\"{number}Uusi! ( Yksi ) \",\"groupOthers\":\"Muut (Yksi)\",\"import\":\"Tuo Asetukset\",\"noCompiler\":\"Tämä lisäosa toimii vain kun laatija on pois käytöstä,laatijan voi poistaa käytöstä Edistynyt Napista Sitten Paina Poista Laatija editorista lisäosa.\",\"noResults\":\"Ei Osumia\",\"presets\":\"Esiasetukset\",\"reset\":\"Resetoi\",\"resetAll\":\"Resetoi Kaikki\",\"search\":\"Etsi\",\"tagBeta\":\"Beta Ominaisuus\",\"tagDanger\":\"Vaarallinen\",\"tagNew\":\"Uusi!\",\"tagRecommended\":\"Suositeltu\",\"tagTheme\":\"Teema\",\"title\":\"Lisäosien Asetukset\",\"unsupported\":\"Jotkut Lisäosat eivät toimi tässä selaimessa:\"},\"fr\":{\"addonFeedback\":\"Commentaires sur les addons\",\"confirmResetAll\":\"Êtes-vous sûr de vouloir réinitialiser tous les paramètres des addons à leurs valeurs par défaut?\",\"credits\":\"Crédits:\",\"dirty\":\"Rechargez les onglets pour appliquer les paramètres.\",\"dirtyButton\":\"Recharger maintenant\",\"enableDangerous\":\"Cet addon est dangereux et va intentionnellement DÉSACTIVER certaines fonctionnalitées. La plupart des utilisateurs NE DOIVENT PAS activer cet addon. Êtes-vous sûr de vouloir l'activer ?\",\"export\":\"Exporter les paramètres\",\"groupDanger\":\"Dangereux ({number})\",\"groupNew\":\"New ({number})\",\"groupOthers\":\"Autres ({number})\",\"import\":\"Importer les paramètres\",\"noCompiler\":\"Cet addon ne fonctionne que lorsque le compilateur est désactivé via le menu Avancé > Désactiver le compilateur ou en utilisant l'addon \\\"Désactiver le compilateur dans l'éditeur\\\".\",\"noResults\":\"Aucun résultat.\",\"presets\":\"Préconfigurations\",\"reset\":\"Réinitialiser\",\"resetAll\":\"Tout réinitialiser\",\"search\":\"Rechercher\",\"tagBeta\":\"Bêta\",\"tagDanger\":\"Dangereux\",\"tagNew\":\"Nouveau!\",\"tagRecommended\":\"Recommandé\",\"tagTheme\":\"Thème\",\"title\":\"Paramètres des addons\",\"unsupported\":\"Les addons suivants ne sont pas pris en charge par votre navigateur:\"},\"ga\":{\"title\":\"socruithe addon\"},\"he\":{\"credits\":\"נקודות זכות:\",\"reset\":\"אִתחוּל\",\"resetAll\":\"לאפס הכל\",\"tagBeta\":\"בטא\",\"tagNew\":\"חָדָשׁ!\"},\"hu\":{\"reset\":\"Visszaállítás\"},\"id\":{\"export\":\"Pengaturan Export\",\"import\":\"Pengaturan Import\",\"reset\":\"Mengatur Ulang \",\"search\":\"Cari\",\"tagRecommended\":\"Di Rekomendasikan\"},\"it\":{\"addonFeedback\":\"Feedback sull'Addon\",\"confirmResetAll\":\"Sei sicuro di voler riportare tutte le impostazioni dell'addon al loro stato iniziale?\",\"credits\":\"Autore/i:\",\"dirty\":\"Ricarica le schede del browser per applicare le nuove impostazioni.\",\"dirtyButton\":\"Ricarica ora\",\"enableDangerous\":\"Questo addon è pericoloso e può intenzionalmente DISABILITARE delle funzionalità. La maggior parte degli utenti NON DOVREBBE abilitare questo addon. Sei sicuro di volerlo abilitare?\",\"export\":\"Esporta le impostazioni\",\"groupDanger\":\"Pericolosi ({number})\",\"groupNew\":\"Nuovi ({number})\",\"groupOthers\":\"Altri ({number})\",\"import\":\"Importa le impostazioni\",\"noCompiler\":\"Questo addon funziona soltanto quando il compilatore è disabilitato usando il menu Impostazioni Avanzate > Disabilita Compilatore o l'addon \\\"Disabilita il compilatore nell'editor\\\".\",\"noResults\":\"Nessun risultato.\",\"presets\":\"Valori predefiniti\",\"reset\":\"Resetta\",\"resetAll\":\"Resetta tutto\",\"search\":\"Cerca\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Pericoloso\",\"tagNew\":\"Nuovo!\",\"tagRecommended\":\"Raccomandato\",\"tagTheme\":\"Tema\",\"title\":\"Impostazioni Addon\",\"unsupported\":\"Alcuni addon non sono disponibili in questo browser:\"},\"ja\":{\"addonFeedback\":\"アドオンのフィードバック\",\"confirmResetAll\":\"アドオンの設定を削除し、デフォルトに戻します。よろしいですか？\",\"credits\":\"クレジット:\",\"dirty\":\"タブを再読み込みして設定を適用します\",\"dirtyButton\":\"すぐに再読み込みする\",\"enableDangerous\":\"このアドオンは危険で、意図的に機能を無効にする可能性があります。多くのユーザーは、このアドオンを有効にすべきではありません。本当に有効にしていいですか？\",\"export\":\"設定を保存する\",\"groupDanger\":\"危険({number})\",\"groupNew\":\"新機能({number})\",\"groupOthers\":\"その他({number})\",\"import\":\"設定を読み込む\",\"noCompiler\":\"このアドオンは、「高度な設定」→「コンパイラを無効にする」、またはアドオンの「エディタでコンパイラを無効にする」を使用してコンパイラを無効にしたときのみ機能します。\",\"noResults\":\"検索条件に一致する結果はありません。\",\"presets\":\"プリセット\",\"reset\":\"リセット\",\"resetAll\":\"全てリセットする\",\"search\":\"検索\",\"tagBeta\":\"ベータ版\",\"tagDanger\":\"危険\",\"tagNew\":\"新機能!\",\"tagRecommended\":\"おすすめ\",\"tagTheme\":\"テーマ\",\"title\":\"アドオン設定\",\"unsupported\":\"いくつかのアドオンがお使いのブラウザに対応していません:\"},\"ja-hira\":{\"addonFeedback\":\"アドオンのフィードバック\",\"confirmResetAll\":\"アドオンのせっていを削除(さくじょ)し、デフォルトにもどします。よろしいですか？\",\"credits\":\"クレジット:\",\"dirtyButton\":\"すぐに再読み込み(さいよみこみ)する\",\"export\":\"設定(せってい)を保存(ほぞん)する\",\"groupDanger\":\"きけん({number})\",\"groupNew\":\"しんきのう({number})\",\"groupOthers\":\"そのた({number})\",\"import\":\"設定(せってい)をよみこむ\",\"noResults\":\"検索条件(けんさくじょうけん)に一致(いっち)する結果(けっか)はありません。\",\"presets\":\"プリセット\",\"reset\":\"リセット\",\"resetAll\":\"すべてリセットする\",\"search\":\"けんさく\",\"tagBeta\":\"ベータばん\",\"tagDanger\":\"きけん\",\"tagNew\":\"しんきのう!\",\"tagRecommended\":\"おすすめ\",\"tagTheme\":\"テーマ\",\"title\":\"アドオンせってい\",\"unsupported\":\"いくつかのアドオンがおつかいのブラウザに対応(たいおう)していません:\"},\"ko\":{\"addonFeedback\":\"애드온 피드백하기\",\"confirmResetAll\":\"정말로 애드온 설정을 기본값으로 초기화하시겠습니까?\",\"credits\":\"도움을 준 사람들 :\",\"dirtyButton\":\"즉시 재시작\",\"enableDangerous\":\"이 애드온은 위험하며 의도적으로 몇몇 기능을 비활성화할 수도 있습니다. 대부분의 사용자들은 이 애드온을 활성화 해서는 안됩니다. 정말로 활성화 하시겠습니까?\",\"export\":\"설정 내보내기\",\"groupDanger\":\"위험한 기능 ({number})\",\"groupNew\":\"새 기능 ({number})\",\"groupOthers\":\"기타 ({number})\",\"import\":\"설정 가져오기\",\"noCompiler\":\"이 애드온은 메뉴에서 고급 설정 > 컴파일러 비활성화 또는 \\\"에디터에서 컴파일러 비활성화\\\" 애드온을 통해서 컴파일러가 비활성화 되었을 때에만 작동합니다.\",\"noResults\":\"결과가 없습니다.\",\"presets\":\"프리셋\",\"reset\":\"초기화\",\"resetAll\":\"모두 초기화\",\"search\":\"검색\",\"tagBeta\":\"베타\",\"tagDanger\":\"위험한 기능\",\"tagNew\":\"새 기능!\",\"tagRecommended\":\"추천\",\"tagTheme\":\"테마\",\"title\":\"애드온 설정\",\"unsupported\":\"몇몇 애드온은 다음 브라우저에서 사용할 수 없습니다 :\"},\"lt\":{\"addonFeedback\":\"Įskiepių atsiliepimas\",\"confirmResetAll\":\"Ar jūs tikras kad norite nustatyti visus įskiepių nustatymus į jų numatytąsias vertes?\",\"credits\":\"Padėkos:\",\"dirty\":\"Perkrauk skirtukus nustatymų pritaikymui.\",\"dirtyButton\":\"Perkrauti dabar\",\"enableDangerous\":\"Šis įskiepis yra pavojingas ir gali tyčia IŠJUNGTI funkcijas. Dauguma naudotojų NETURĖTŲ įjungti šio priedo. Ar tikrai norite jį įjungti?\",\"export\":\"Eksportuoti nustatymus\",\"groupDanger\":\"Pavojingi ({number})\",\"groupNew\":\"Nauji ({number})\",\"groupOthers\":\"Kiti ({number})\",\"import\":\"Importuoti nustatymus\",\"noCompiler\":\"Šis priedas veikia tik tada, kai kompiliatorius išjungtas per meniu Išplėstinė > Išjungti kompiliatorių arba naudojant įskiepį \\\"Išjungti kompiliatorių redaktoriuje\\\".\",\"noResults\":\"Jokių rezultatų.\",\"presets\":\"Iš anksto nustatyti\",\"reset\":\"nustatyti iš naujo\",\"resetAll\":\"nustatyti viską iš naujo\",\"search\":\"Ieškoti\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Pavojingas\",\"tagNew\":\"Naujiena!\",\"tagRecommended\":\"Rekomenduotas\",\"tagTheme\":\"Fonas\",\"title\":\"Įskiepių nustatymai\",\"unsupported\":\"Keletas įskiepių yra nepalaikomi šioje naršyklėje:\"},\"nb\":{\"addonFeedback\":\"Utvidelse tilbakemelding\",\"confirmResetAll\":\"Er du sikkert at du vil tilbakestill alle utvidelser?\",\"credits\":\"Fra:\",\"dirtyButton\":\"Oppdater siden nå\",\"export\":\"Eksportinnstillinger\",\"import\":\"Importinnstillinger\",\"noResults\":\"Ingen resultater.\",\"reset\":\"Tilbakestill\",\"resetAll\":\"Tilbakestill alt\",\"search\":\"Søk\",\"tagBeta\":\"Beta\",\"tagNew\":\"Ny!\",\"tagRecommended\":\"Anbefalt\",\"tagTheme\":\"Tema\",\"title\":\"Innstillinger for utvidelser\",\"unsupported\":\"Noen utvidelser er ikke tilgjengelig på dette nettleser.\"},\"nl\":{\"addonFeedback\":\"Addonfeedback\",\"confirmResetAll\":\"Weet je zeker dat je alle addonsinstellingen wilt resetten naar hun standaardinstellingen?\",\"credits\":\"Dank aan:\",\"dirty\":\"Tabbladen verversen om instellingen toe te passen.\",\"dirtyButton\":\"Verversen\",\"enableDangerous\":\"Deze addon is gevaarlijk en kan opzettelijk functies UITSCHAKELEN. De meeste gebruikers zouden deze addon NIET moeten inschakelen. Weet je zeker dat je het wilt inschakelen?\",\"export\":\"Instellingen exporteren\",\"groupDanger\":\"Gevaarlijk ({number})\",\"groupNew\":\"Nieuw ({number})\",\"groupOthers\":\"Anderen ({number})\",\"import\":\"Instellingen importeren\",\"noCompiler\":\"Deze addon werkt alleen als de compiler is uitgezet, dit kun je doen in Geavanceerd > Compiler Uitzetten of door de \\\"Compiler uitzetten in editor\\\"-addon.\",\"noResults\":\"Geen resultaten.\",\"presets\":\"Voorinstellingen\",\"reset\":\"Reset\",\"resetAll\":\"Alles resetten\",\"search\":\"Zoek\",\"tagBeta\":\"Bèta\",\"tagDanger\":\"Gevaarlijk\",\"tagNew\":\"Nieuw!\",\"tagRecommended\":\"Aanbevolen\",\"tagTheme\":\"Thema\",\"title\":\"Addonsinstellingen\",\"unsupported\":\"Sommige addons zijn niet beschikbaar in deze browser:\"},\"pl\":{\"addonFeedback\":\"Opinia o dodatkach\",\"confirmResetAll\":\"Jesteś pewien, że chcesz zresetować wszystkie dodatki do ich domyślnych wartości?\",\"credits\":\"Kredyty:\",\"dirty\":\"Odśwież karty, aby załączyć ustawienia.\",\"dirtyButton\":\"Odśwież teraz\",\"enableDangerous\":\"Ten dodatek jest niebezpieczny i może intencjonalnie WYŁĄCZYĆ funkcje. Większość użytkowników NIE POWINNA włączać tego dodatku. Czy jesteś pewien, że chcesz go włączyć?\",\"export\":\"Eksportuj ustawienia\",\"groupDanger\":\"Niebezpieczne({number})\",\"groupNew\":\"Nowe({number})\",\"groupOthers\":\"Inne({number})\",\"import\":\"Importuj ustawienia\",\"noCompiler\":\"Ten dodatek działa tylko kiedy kompiler jest wyłączony poprzez Zaawansowane Ustawienia > Wyłącz Kompiler albo używając dodatku \\\"Wyłącz kompiler w edytorze\\\".\",\"noResults\":\"Brak wyników.\",\"presets\":\"Ustawienia wstępne\",\"reset\":\"Resetuj\",\"resetAll\":\"Resetuj wszystko\",\"search\":\"Szukaj\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Niebezpieczne\",\"tagNew\":\"Nowość!\",\"tagRecommended\":\"Polecane\",\"tagTheme\":\"Motyw\",\"title\":\"Ustawienia Dodatków\",\"unsupported\":\"Niektóre dodatki nie są dostępne w tej przeglądarce:\"},\"pt\":{\"addonFeedback\":\"Dar Feedback sobre Addons\",\"confirmResetAll\":\"Tem certeza que quer restaurar todas as configurações de addons aos seus valores originais?\",\"credits\":\"Créditos:\",\"dirtyButton\":\"Recarregar agora\",\"enableDangerous\":\"Este addon é perigoso e pode intencionalmente DESATIVAR funcionalidades. A maioria dos usuários NÃO DEVEM ativar este addon. Tem certeza que quer ativá-lo?\",\"export\":\"Exportar configurações\",\"groupDanger\":\"Perigosos ({number})\",\"groupNew\":\"Novos ({number})\",\"groupOthers\":\"Outros ({number})\",\"import\":\"Importar configurações\",\"noCompiler\":\"Esse addon apenas funciona com o compilador desligado, o que pode ser feito através do menu Avançado > Desligar Compilador ou usando o addon \\\"Desabilitar compilador no editor\\\".\",\"noResults\":\"Nenhum resultado.\",\"presets\":\"Predefinições\",\"reset\":\"Redefinir\",\"resetAll\":\"Redefinir todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perigoso\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Configurações de Addon\",\"unsupported\":\"Alguns addons não estão disponíveis neste navegador:\"},\"pt-br\":{\"addonFeedback\":\"Dar Feedback sobre Addons\",\"confirmResetAll\":\"Tem certeza que quer restaurar todas as configurações de addons aos seus valores originais?\",\"credits\":\"Créditos:\",\"dirty\":\"Recarregue a página para aplicar as opções.\",\"dirtyButton\":\"Recarregar agora\",\"enableDangerous\":\"Este addon é perigoso e pode intencionalmente DESATIVAR funcionalidades. A maioria dos usuários NÃO DEVEM ativar este addon. Tem certeza que quer ativá-lo?\",\"export\":\"Exportar configurações\",\"groupDanger\":\"Perigosos ({number})\",\"groupNew\":\"Novos ({number})\",\"groupOthers\":\"Outros ({number})\",\"import\":\"Importar configurações\",\"noCompiler\":\"Esse addon apenas funciona com o compilador desligado, o que pode ser feito através do menu Avançado > Desligar Compilador ou usando o addon \\\"Desabilitar compilador no editor\\\".\",\"noResults\":\"Nenhum resultado.\",\"presets\":\"Predefinições\",\"reset\":\"Redefinir\",\"resetAll\":\"Redefinir todos\",\"search\":\"Buscar\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Perigoso\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Recomendado\",\"tagTheme\":\"Tema\",\"title\":\"Configurações de Addon\",\"unsupported\":\"Alguns addons não estão disponíveis neste navegador:\"},\"ro\":{\"addonFeedback\":\"Spune-ți Părerea despre Extensii\",\"confirmResetAll\":\"Ești sigur că vrei să resetezi toate setările extensiilor la valorile lor implicite?\",\"credits\":\"Credite:\",\"dirtyButton\":\"Reîncarcă acum\",\"export\":\"Exportă setările\",\"import\":\"Importă setările\",\"noResults\":\"Niciun rezultat.\",\"presets\":\"Presetări\",\"reset\":\"Resetează\",\"resetAll\":\"Resetează toate\",\"search\":\"Caută\",\"tagBeta\":\"Beta\",\"tagRecommended\":\"Recomandat\",\"title\":\"Setările Addon-urilor\",\"unsupported\":\"Unele extensii nu sunt disponibile în acest browser:\"},\"ru\":{\"addonFeedback\":\"Отзывы о дополнениях\",\"confirmResetAll\":\"Вы уверены, что хотите сбросить настройки всех дополнений до значений по умолчанию?\",\"credits\":\"Благодарности:\",\"dirty\":\"Перезагрузите вкладки, чтобы применить настройки.\",\"dirtyButton\":\"Перезагрузить сейчас\",\"enableDangerous\":\"Этот аддон опасен и может намеренно ОТКЛЮЧИТЬ функции. Большинству пользователей НЕ СЛЕДУЕТ включать этот аддон. Вы уверены, что хотите его включить?\",\"export\":\"Экспорт настроек\",\"groupDanger\":\"Опасное ({number})\",\"groupNew\":\"Новое ({number})\",\"groupOthers\":\"Прочее ({number})\",\"import\":\"Импорт настроек\",\"noCompiler\":\"Этот аддон работает только когда компилятор отключен через меню Дополнительно > Отключить Компилятор или при помощи аддона \\\"Отключение компилятора в редакторе\\\"\",\"noResults\":\"Нет результатов.\",\"presets\":\"Предустановки\",\"reset\":\"Сбросить\",\"resetAll\":\"Сбросить всё\",\"search\":\"Поиск\",\"tagBeta\":\"Бета\",\"tagDanger\":\"Опасное\",\"tagNew\":\"Новое!\",\"tagRecommended\":\"Рекомендованно\",\"tagTheme\":\"Тема\",\"title\":\"Настройки аддонов\",\"unsupported\":\"Некоторые дополнения не доступны в данном браузере:\"},\"sl\":{\"addonFeedback\":\"Povratne informacije o dodatkih\",\"confirmResetAll\":\"Ste prepričani, da želite ponastaviti vse nastavitve dodatkov?\",\"credits\":\"Hvala:\",\"dirty\":\"Znova naložite zavihke, da uporabite spremenjene nastavitve.\",\"dirtyButton\":\"Znova naloži zdaj\",\"enableDangerous\":\"Ta dodatek je nevaren in morda namenoma ODSTRANI funkcije. Večina uporabnikov tega dodatka NE POTREBUJE. Ste prepričani, da ga želite vključiti?\",\"export\":\"Izvozi nastavitve\",\"groupDanger\":\"Nevarno ({number})\",\"groupNew\":\"Novo ({number})\",\"groupOthers\":\"Drugo ({number})\",\"import\":\"Uvozi nastavitve\",\"noCompiler\":\"Ta dodatek deluje samo, če je prevajalnik izključen v meniju Napredno > Onemogoči prevajalnik ali z dodatkom \\\"Disable compiler in editor\\\".\",\"noResults\":\"Ni rezultatov.\",\"presets\":\"Prednastavitve\",\"reset\":\"Ponastavi\",\"resetAll\":\"Ponastavi vse\",\"search\":\"Iskanje\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nevarno\",\"tagNew\":\"Novo!\",\"tagRecommended\":\"Priporočeno\",\"tagTheme\":\"Tema\",\"title\":\"Nastavitve dodatkov\",\"unsupported\":\"Nekateri dodatki v tem brskalniku niso na voljo:\"},\"sr\":{\"addonFeedback\":\"Повратне информације о додацима\",\"confirmResetAll\":\"Да ли сте сигурни да желите да ресетујете сва подешавања додатака?\",\"credits\":\"Заслуге:\",\"dirtyButton\":\"Понов учитај\",\"enableDangerous\":\"Овај додатак је опасан и може намерно ОНЕМОГУЋИТИ функције. Већина корисника НЕ ТРЕБА користити овај додатак. Да ли сте сигурни да га желите укључити?\",\"export\":\"Извези подешавања\",\"groupDanger\":\"Опасно ({number})\",\"groupNew\":\"Ново ({number})\",\"groupOthers\":\"Остало ({number})\",\"import\":\"Увези подешавања\",\"noCompiler\":\"Овај додатак ради само кад је преводилац кода онемогућен кроз мени Напредно > Онемогући преводилац кода или користећи додатак \\\"Онемогући преводилац кода у едитору\\\".\",\"noResults\":\"Нема резултата.\",\"presets\":\"Унапред подешена подешавања\",\"reset\":\"Ресетуј\",\"resetAll\":\"Ресетуј све\",\"search\":\"Претражи\",\"tagBeta\":\"Бета\",\"tagDanger\":\"Опасно\",\"tagNew\":\"Ново!\",\"tagRecommended\":\"Препоручено\",\"tagTheme\":\"Тема\",\"title\":\"Подешавања додатака\",\"unsupported\":\"Неки додаци нису доступни у овом прегледачу:\"},\"sv\":{\"addonFeedback\":\"Tilläggsrespons\",\"confirmResetAll\":\"Är du säker på att du vill återställa alla tilläggsinställningar till standardvärdena?\",\"credits\":\"kreditera:\",\"dirtyButton\":\"Ladda om nu\",\"export\":\"Exportera inställningar\",\"import\":\"Importera inställningar\",\"noResults\":\"Inga resutat\",\"presets\":\"Förinställningar\",\"reset\":\"Starta om\",\"resetAll\":\"Starta om allt\",\"search\":\"Sök\",\"tagBeta\":\"Beta\",\"tagNew\":\"Nytt!\",\"tagRecommended\":\"Rekomenderat\",\"tagTheme\":\"Tema\",\"title\":\"Tilläggsinställningar\",\"unsupported\":\"Vissa tillägg är inte tillgängliga i den här webbläsaren:\"},\"th\":{\"addonFeedback\":\"ความคิดเห็น Addon\",\"confirmResetAll\":\"คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตการตั้งค่า Addons กลับไปเป็นการตั้งค่าเริ่มต้น\",\"credits\":\"เครดิต :\",\"dirtyButton\":\"แตะเพื่อรีโหลด\",\"export\":\"Export การตั้งค่า\",\"import\":\"Import การตั้งค่า\",\"noResults\":\"ไม่พบข้อมูล\",\"presets\":\"Presets\",\"reset\":\"รีเซ็ต\",\"resetAll\":\"รีเซ็ตทั้งหมด\",\"search\":\"ค้นหา\",\"tagBeta\":\"อยู่ระหว่างการพัฒนาระบบ\",\"tagNew\":\"ใหม่\",\"tagRecommended\":\"คำแนะนำ\",\"tagTheme\":\"ธีม\",\"title\":\"การตั้งค่า Addons\",\"unsupported\":\"Addon บางอย่างยังไม่ได้รับการสนับสนุนในบราวเซอร์นี้\"},\"tr\":{\"addonFeedback\":\"Eklenti geribildirim\",\"confirmResetAll\":\"Bütün eklenti ayarlarını varsayılan değerlerine sıfırlamak istediğinizden emin misiniz?\",\"credits\":\"Krediler:\",\"dirtyButton\":\"Şimdi yeniden yükle\",\"enableDangerous\":\"Bu eklenti tehlikelidir ve bilerek özellikleri DEVRE DIŞI BIRAKABİLİR. Çoğu kullanıcı bu eklentiyi ETKİNLEŞTİRMEMELİDİR. Etkinleştirmek istediğinizden emin misiniz?\",\"export\":\"Dışarıya aktarmak ayarları\",\"groupDanger\":\"Tehlikeli ({number})\",\"groupNew\":\"Yeni ({number})\",\"groupOthers\":\"Diğerler ({number})\",\"import\":\"İçeri aktarmak ayarları\",\"noCompiler\":\"Bu eklenti sadece derleyiciyi Gelişmiş > Derlemeyi Kapat yada Derlemeyi editörde kapat eklenti ile kapatırsan\",\"noResults\":\"Sonuçlar yok.\",\"presets\":\"Varsayılan ayarları\",\"reset\":\"Sıfırla\",\"resetAll\":\"Her şeyi sıfırla\",\"search\":\"Arama\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Tehlikeli\",\"tagNew\":\"Yeni!\",\"tagRecommended\":\"Önerildi\",\"tagTheme\":\"Tema\",\"title\":\"Eklenti Ayarları\",\"unsupported\":\"Bazı eklentiler bu tarayıcıda kullanılamıyor:\"},\"uk\":{\"addonFeedback\":\"Відгук про доповнення\",\"confirmResetAll\":\"Ви впевнені, що хочете скинути усі налаштування доповненнь до їхніх значеннь за замовчуванням?\",\"credits\":\"Подяка:\",\"dirty\":\"Перезавантажте вкладки щоб застосувати налаштування.\",\"dirtyButton\":\"Перезавантажити зараз\",\"enableDangerous\":\"Це доповнення небезпечне та може навмисно ВИМИКАТИ деякі функції. Деяким користувачам НЕ СЛІД вмикати цю функцію. Ви дійсно хочите увімкнути це?\",\"export\":\"Експортувати налаштування\",\"groupDanger\":\"Небезпечні ({number})\",\"groupNew\":\"Нове ({number})\",\"groupOthers\":\"Інші ({number})\",\"import\":\"Імпортувати налаштування\",\"noCompiler\":\"Це доповнення працює тільки тоді, коли компілятор вимкнено, вимкніть компілятор в меню \\\"Додатково\\\" або використовуйте доповнення \\\"Вимкнути компілятор в редакторі\\\".\",\"noResults\":\"Немає результатів.\",\"presets\":\"Попередні налаштування\",\"reset\":\"Скинути\",\"resetAll\":\"Скинути все\",\"search\":\"Пошук\",\"tagBeta\":\"Бета\",\"tagDanger\":\"Небезпечно\",\"tagNew\":\"Нове!\",\"tagRecommended\":\"Рекомендовано\",\"tagTheme\":\"Тема\",\"title\":\"Налаштування доповненнь\",\"unsupported\":\"Деякі доповнення не доступні у цьому браузері:\"},\"vi\":{\"addonFeedback\":\"Phản hồi\",\"confirmResetAll\":\"Bạn có chắc khi chỉnh lại tất cả các cài đặt addon về giá trị mặc định không?\",\"credits\":\"Tác giả:\",\"dirtyButton\":\"Tải lại ngay bây giờ\",\"enableDangerous\":\"Addon này nguy hiểm và có thể cố ý VÔ HIỆU HOÁ các tính năng. Hầu hết người dùng KHÔNG NÊN bật addon này. Bạn có chắc khi bật addon này chứ?\",\"export\":\"Xuất cài đặt\",\"groupDanger\":\"Nguy hiểm ({number})\",\"groupNew\":\"Mới ({number})\",\"groupOthers\":\"Còn lại ({number})\",\"import\":\"Tải lên cài đặt\",\"noResults\":\"Không có kết quả.\",\"presets\":\"Cài đặt cho trước\",\"reset\":\"Cài Đặt Lại\",\"resetAll\":\"Cài Đặt lại tất cả\",\"search\":\"Tìm kiếm\",\"tagBeta\":\"Beta\",\"tagDanger\":\"Nguy hiểm\",\"tagNew\":\"Mới!\",\"tagRecommended\":\"Khuyên dùng\",\"tagTheme\":\"Chủ đề\",\"title\":\"Cài Đặt Addon\",\"unsupported\":\"Một vài addons không khả dụng ở trong trình duệt này:\"},\"zh-cn\":{\"addonFeedback\":\"插件反馈\",\"confirmResetAll\":\"你确定要将所有插件设置重置为默认值吗？\",\"credits\":\"鸣谢：\",\"dirty\":\"重新加载选项卡以应用设置。\",\"dirtyButton\":\"重新加载\",\"enableDangerous\":\"此插件存在潜在的风险，可能会禁用某些功能。大多数用户不应启用此加载项。您确定要启用它吗？\",\"export\":\"导出设置\",\"groupDanger\":\"危险（{number}）\",\"groupNew\":\"最新（{number}）\",\"groupOthers\":\"其他（{number}）\",\"import\":\"导入设置\",\"noCompiler\":\"这个插件只有在通过高级 > 禁用编译器选项或使用\\\"在编辑器中禁用编译器\\\"插件禁用编译器的情况下才能工作。\",\"noResults\":\"没有相符的结果。\",\"presets\":\"预设\",\"reset\":\"重置\",\"resetAll\":\"全部重置\",\"search\":\"搜索\",\"tagBeta\":\"测试\",\"tagDanger\":\"危险\",\"tagNew\":\"最新\",\"tagRecommended\":\"推荐\",\"tagTheme\":\"外观\",\"title\":\"插件设置\",\"unsupported\":\"某些插件在此浏览器中不可用：\"},\"zh-tw\":{\"addonFeedback\":\"附加元件回饋\",\"confirmResetAll\":\"你確定要重設所有附件設定？\",\"credits\":\"感謝：\",\"dirtyButton\":\"重新載入\",\"export\":\"匯出設定\",\"groupDanger\":\"危險（{number}）\",\"groupNew\":\"全新（{number}）\",\"groupOthers\":\"其他（{number}）\",\"import\":\"匯入設定\",\"noResults\":\"沒有相符的結果。\",\"presets\":\"預設\",\"reset\":\"重設\",\"resetAll\":\"全部重設\",\"search\":\"搜尋……\",\"tagBeta\":\"測試\",\"tagDanger\":\"危險\",\"tagNew\":\"全新\",\"tagRecommended\":\"推薦\",\"tagTheme\":\"外觀\",\"title\":\"附件設定\",\"unsupported\":\"下列附加元件在此瀏覽器不可用：\"}}");
 
 /***/ }),
 
@@ -2544,7 +2596,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! raw-loader!./tw-theme-dark.css */ "./node_modules/raw-loader/index.js!./src/lib/tw-theme-dark.css");
 /* harmony import */ var _raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_raw_loader_tw_theme_dark_css__WEBPACK_IMPORTED_MODULE_1__);
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
