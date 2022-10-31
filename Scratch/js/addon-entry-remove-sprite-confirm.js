@@ -28,22 +28,17 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
-  let {
-    addon,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async ({
+  addon,
+  console,
+  msg
+}) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   const vm = addon.tab.traps.vm;
   if (!vm) return;
   const oldDeleteSprite = vm.deleteSprite;
 
-  const newDeleteSprite = function newDeleteSprite() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
+  const newDeleteSprite = function newDeleteSprite(...args) {
     if (addon.self.disabled) return oldDeleteSprite.apply(this, args);
     const canDelete = confirm(msg("confirm"));
     if (canDelete) return oldDeleteSprite.apply(this, args);

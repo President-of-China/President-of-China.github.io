@@ -28,13 +28,12 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    cons,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  cons,
+  msg
+}) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   let defaultKeys = null;
 
@@ -67,17 +66,13 @@ __webpack_require__.r(__webpack_exports__);
     const block = ScratchBlocks.Blocks[opcode];
     const originalInit = block.init;
 
-    block.init = function () {
+    block.init = function (...args) {
       const originalJsonInit = this.jsonInit;
 
       this.jsonInit = function (obj) {
         appendKeys(obj.args0[0].options, opcode === "event_whenkeypressed");
         return originalJsonInit.call(this, obj);
       };
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
 
       return originalInit.call(this, ...args);
     };

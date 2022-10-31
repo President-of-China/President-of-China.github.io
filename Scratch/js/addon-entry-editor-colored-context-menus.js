@@ -51,12 +51,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const applyContextMenuColor = block => {
@@ -86,13 +85,8 @@ __webpack_require__.r(__webpack_exports__);
 
   const originalHandleRightClick = ScratchBlocks.Gesture.prototype.handleRightClick;
 
-  ScratchBlocks.Gesture.prototype.handleRightClick = function () {
+  ScratchBlocks.Gesture.prototype.handleRightClick = function (...args) {
     const block = this.targetBlock_;
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
     const ret = originalHandleRightClick.call(this, ...args);
 
     if (block) {
@@ -104,13 +98,9 @@ __webpack_require__.r(__webpack_exports__);
 
   const originalHide = ScratchBlocks.WidgetDiv.hide;
 
-  ScratchBlocks.WidgetDiv.hide = function () {
+  ScratchBlocks.WidgetDiv.hide = function (...args) {
     if (ScratchBlocks.WidgetDiv.DIV) {
       ScratchBlocks.WidgetDiv.DIV.classList.remove("sa-contextmenu-colored");
-    }
-
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
     }
 
     return originalHide.call(this, ...args);

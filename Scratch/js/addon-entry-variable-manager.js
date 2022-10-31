@@ -101,13 +101,12 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console,
+  msg
+}) {
   const vm = addon.tab.traps.vm;
   let localVariables = [];
   let globalVariables = [];
@@ -433,11 +432,9 @@ const _twGetAsset = path => {
   }
 
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", _ref2 => {
-    let {
-      detail
-    } = _ref2;
-
+  addon.tab.redux.addEventListener("statechanged", ({
+    detail
+  }) => {
     if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
       setVisible(detail.action.activeTabIndex === 3);
     } else if (detail.action.type === "scratch-gui/mode/SET_PLAYER") {
@@ -463,11 +460,7 @@ const _twGetAsset = path => {
   });
   const oldStep = vm.runtime._step;
 
-  vm.runtime._step = function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
+  vm.runtime._step = function (...args) {
     const ret = oldStep.call(this, ...args);
 
     try {

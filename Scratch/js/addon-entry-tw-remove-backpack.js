@@ -51,11 +51,9 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon
-  } = _ref;
-
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon
+}) {
   const resize = () => window.dispatchEvent(new Event("resize"));
 
   addon.self.addEventListener('disabled', resize);

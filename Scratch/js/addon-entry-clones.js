@@ -74,13 +74,12 @@ module.exports = __webpack_require__.p + "static/assets/8a30520407ffdf5b0e7e06e4
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console,
+  msg
+}) {
   const vm = addon.tab.traps.vm;
   let showIconOnly = addon.settings.get("showicononly");
 
@@ -145,11 +144,7 @@ __webpack_require__.r(__webpack_exports__);
   });
   const oldStep = vm.runtime._step;
 
-  vm.runtime._step = function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
+  vm.runtime._step = function (...args) {
     const ret = oldStep.call(this, ...args);
     doCloneChecks();
     return ret;

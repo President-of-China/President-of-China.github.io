@@ -51,12 +51,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    msg,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  msg,
+  console
+}) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
@@ -420,9 +419,9 @@ __webpack_require__.r(__webpack_exports__);
   const originalRenameVariable = ScratchBlocks.Variables.renameVariable;
 
   ScratchBlocks.Variables.renameVariable = function (workspace, variable, opt_callback) {
-    const ret = originalRenameVariable.call(this, workspace, variable, function () {
+    const ret = originalRenameVariable.call(this, workspace, variable, (...args) => {
       if (opt_callback) {
-        opt_callback(...arguments);
+        opt_callback(...args);
       }
 
       if (!addon.self.disabled && prompt) {

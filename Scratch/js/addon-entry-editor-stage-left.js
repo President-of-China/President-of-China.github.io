@@ -51,12 +51,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const resize = () => {

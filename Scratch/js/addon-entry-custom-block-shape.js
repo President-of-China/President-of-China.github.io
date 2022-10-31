@@ -28,12 +28,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
@@ -62,10 +61,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
 
-    function applyChanges() {
-      let paddingSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : addon.settings.get("paddingSize");
-      let cornerSize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : addon.settings.get("cornerSize");
-      let notchSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : addon.settings.get("notchSize");
+    function applyChanges(paddingSize = addon.settings.get("paddingSize"), cornerSize = addon.settings.get("cornerSize"), notchSize = addon.settings.get("notchSize")) {
       let multiplier = paddingSize / 100;
       cornerSize = cornerSize / 100;
       notchSize = notchSize / 100;
@@ -125,8 +121,8 @@ __webpack_require__.r(__webpack_exports__);
       BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
 
-    function applyAndUpdate() {
-      applyChanges(...arguments);
+    function applyAndUpdate(...args) {
+      applyChanges(...args);
       updateAllBlocks();
     }
 

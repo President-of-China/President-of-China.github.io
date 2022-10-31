@@ -79,9 +79,9 @@ const resources = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _url_loader_lock_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url-loader!./lock.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/hide-flyout/lock.svg");
 /* harmony import */ var _url_loader_unlock_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! url-loader!./unlock.svg */ "./node_modules/url-loader/dist/cjs.js!./src/addons/addons/hide-flyout/unlock.svg");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -95,13 +95,12 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console,
+  msg
+}) {
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -166,9 +165,7 @@ const _twGetAsset = path => {
     lockIcon.src = _twGetAsset("/".concat(flyoutLock ? "" : "un", "lock.svg"));
   }
 
-  function onmouseenter(e) {
-    let speed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+  function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (!e || e.buttons === 0 || document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")) {
       speed = typeof speed === "object" ? getSpeedValue() : speed;
@@ -184,8 +181,7 @@ const _twGetAsset = path => {
     closeOnMouseUp = false; // only close if the mouseup event happens outside the flyout
   }
 
-  function onmouseleave(e) {
-    let speed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getSpeedValue();
+  function onmouseleave(e, speed = getSpeedValue()) {
     if (flyoutLock) return;
 
     if (e && e.buttons) {
@@ -279,8 +275,7 @@ const _twGetAsset = path => {
 
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
 
-    Blockly.Toolbox.prototype.setSelectedItem = function (item) {
-      let shouldScroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll = true) {
       const previousSelection = this.selectedItem_;
       oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
@@ -303,31 +298,22 @@ const _twGetAsset = path => {
 
     const oldSelectCategoryById = Blockly.Toolbox.prototype.selectCategoryById;
 
-    Blockly.Toolbox.prototype.selectCategoryById = function () {
+    Blockly.Toolbox.prototype.selectCategoryById = function (...args) {
       // called after populating the toolbox
       // ignore if the palette is closed
       if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) return;
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
       return oldSelectCategoryById.call(this, ...args);
     };
 
     const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
 
-    Blockly.Flyout.prototype.stepScrollAnimation = function () {
+    Blockly.Flyout.prototype.stepScrollAnimation = function (...args) {
       // scrolling should not be animated when opening the flyout in category click mode
       if (!scrollAnimation) {
         this.scrollbar_.set(this.scrollTarget);
         this.scrollTarget = null;
         scrollAnimation = true;
         return;
-      }
-
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
       }
 
       return oldStepScrollAnimation.apply(this, args);

@@ -512,11 +512,7 @@ const setup = _vm => {
 
   const originalStartHats = vm.runtime.startHats;
 
-  vm.runtime.startHats = function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
+  vm.runtime.startHats = function (...args) {
     const hat = args[0]; // These hats can be manually started by the user when paused or while single stepping.
 
     const isUserInitiated = hat === "event_whenbroadcastreceived" || hat === "control_start_as_clone";
@@ -592,12 +588,11 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
   const DRAG_OVER_CLASS = "sa-dragged-over";
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
 
@@ -776,12 +771,11 @@ const _twGetAsset = path => {
   throw new Error("Unknown asset: ".concat(path));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console
+}) {
   const vm = addon.tab.traps.vm;
   let muted = false;
   let icon = document.createElement("img");
@@ -874,13 +868,12 @@ const _twGetAsset = path => {
 };
 
 
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon,
-    global,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon,
+  global,
+  console,
+  msg
+}) {
   Object(_debugger_module_js__WEBPACK_IMPORTED_MODULE_2__["setup"])(addon.tab.traps.vm);
   const img = document.createElement("img");
   img.className = "pause-btn";
@@ -1218,13 +1211,12 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     return tabReduxInstance;
   }
 
-  waitForElement(selector) {
-    let {
-      markAsSeen = false,
-      condition,
-      reduxCondition,
-      reduxEvents
-    } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  waitForElement(selector, {
+    markAsSeen = false,
+    condition,
+    reduxCondition,
+    reduxEvents
+  } = {}) {
     let externalEventSatisfied = true;
 
     const evaluateCondition = () => {
@@ -1249,10 +1241,9 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     if (reduxEvents) {
       externalEventSatisfied = false;
 
-      reduxListener = _ref => {
-        let {
-          detail
-        } = _ref;
+      reduxListener = ({
+        detail
+      }) => {
         const type = detail.action.type; // As addons can't run before DOM exists here, ignore fontsLoaded/SET_FONTS_LOADED
         // Otherwise, as our font loading is very async, we could activate more often than required.
 
@@ -1291,13 +1282,12 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     });
   }
 
-  appendToSharedSpace(_ref2) {
-    let {
-      space,
-      element,
-      order,
-      scope
-    } = _ref2;
+  appendToSharedSpace({
+    space,
+    element,
+    order,
+    scope
+  }) {
     const SHARED_SPACES = {
       stageHeader: {
         element: () => document.querySelector("[class^='stage-header_stage-size-row']"),
@@ -1410,12 +1400,11 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     return true;
   }
 
-  addBlock(procedureCode, _ref3) {
-    let {
-      args,
-      displayName,
-      callback
-    } = _ref3;
+  addBlock(procedureCode, {
+    args,
+    displayName,
+    callback
+  }) {
     const procCodeArguments = parseArguments(procedureCode);
 
     if (args.length !== procCodeArguments.length) {
@@ -1450,7 +1439,7 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
         const BlockSvg = ScratchBlocks.BlockSvg;
         const oldUpdateColour = BlockSvg.prototype.updateColour;
 
-        BlockSvg.prototype.updateColour = function () {
+        BlockSvg.prototype.updateColour = function (...args2) {
           // procedures_prototype also has a procedure code but we do not want to color them.
           if (this.type === 'procedures_call') {
             const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
@@ -1463,21 +1452,13 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
             }
           }
 
-          for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
-            args2[_key] = arguments[_key];
-          }
-
           return oldUpdateColour.call(this, ...args2);
         };
 
         const originalCreateAllInputs = ScratchBlocks.Blocks.procedures_call.createAllInputs_;
 
-        ScratchBlocks.Blocks.procedures_call.createAllInputs_ = function () {
+        ScratchBlocks.Blocks.procedures_call.createAllInputs_ = function (...args2) {
           const block = this.procCode_ && vm.runtime.getAddonBlock(this.procCode_);
-
-          for (var _len2 = arguments.length, args2 = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            args2[_key2] = arguments[_key2];
-          }
 
           if (block && block.displayName) {
             const originalProcCode = this.procCode_;
@@ -1502,13 +1483,12 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     return vm.getAddonBlock(procedureCode);
   }
 
-  createBlockContextMenu(callback) {
-    let {
-      workspace = false,
-      blocks = false,
-      flyout = false,
-      comments = false
-    } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  createBlockContextMenu(callback, {
+    workspace = false,
+    blocks = false,
+    flyout = false,
+    comments = false
+  } = {}) {
     contextMenuCallbacks.push({
       addonId: this._id,
       callback,
@@ -1535,10 +1515,7 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
           comments
         } of contextMenuCallbacks) {
           const injectMenu = // Workspace
-          workspace && !block && !gesture.flyout_ && !gesture.startBubble_ || // Block in workspace
-          blocks && block && !gesture.flyout_ || // Block in flyout
-          flyout && gesture.flyout_ || // Comments
-          comments && gesture.startBubble_;
+          workspace && !block && !gesture.flyout_ && !gesture.startBubble_ || blocks && block && !gesture.flyout_ || flyout && gesture.flyout_ || comments && gesture.startBubble_;
 
           if (injectMenu) {
             try {
@@ -1583,13 +1560,9 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     return tabReduxInstance.state.locales.messages[id];
   }
 
-  scratchClass() {
+  scratchClass(...args) {
     const scratchClasses = getScratchClassNames();
     const classes = [];
-
-    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
-    }
 
     for (const arg of args) {
       if (typeof arg === 'string') {
@@ -1627,28 +1600,19 @@ class Tab extends _event_target__WEBPACK_IMPORTED_MODULE_3__["default"] {
     return this.redux.state.locales.isRtl ? 'rtl' : 'ltr';
   }
 
-  createModal(title) {
-    let {
-      isOpen = false
-    } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  createModal(title, {
+    isOpen = false
+  } = {}) {
     return _modal__WEBPACK_IMPORTED_MODULE_10__["createEditorModal"](this, title, {
       isOpen
     });
   }
 
-  confirm() {
-    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-      args[_key4] = arguments[_key4];
-    }
-
+  confirm(...args) {
     return _modal__WEBPACK_IMPORTED_MODULE_10__["confirm"](this, ...args);
   }
 
-  prompt() {
-    for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-      args[_key5] = arguments[_key5];
-    }
-
+  prompt(...args) {
     return _modal__WEBPACK_IMPORTED_MODULE_10__["prompt"](this, ...args);
   }
 
@@ -1889,22 +1853,14 @@ const emitUrlChange = () => {
 
 const originalReplaceState = history.replaceState;
 
-history.replaceState = function () {
-  for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-    args[_key6] = arguments[_key6];
-  }
-
+history.replaceState = function (...args) {
   originalReplaceState.apply(this, args);
   emitUrlChange();
 };
 
 const originalPushState = history.pushState;
 
-history.pushState = function () {
-  for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    args[_key7] = arguments[_key7];
-  }
-
+history.pushState = function (...args) {
   originalPushState.apply(this, args);
   emitUrlChange();
 };
@@ -1951,9 +1907,9 @@ for (const id of Object.keys(_generated_addon_manifests__WEBPACK_IMPORTED_MODULE
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addContextMenu", function() { return addContextMenu; });
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -2212,10 +2168,9 @@ __webpack_require__.r(__webpack_exports__);
 // https://github.com/ScratchAddons/ScratchAddons/blob/master/addon-api/content-script/modal.js
 
 
-const createEditorModal = function createEditorModal(tab, title) {
-  let {
-    isOpen = false
-  } = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+const createEditorModal = (tab, title, {
+  isOpen = false
+} = {}) => {
   const container = Object.assign(document.createElement('div'), {
     className: tab.scratchClass('modal_modal-overlay'),
     dir: tab.direction
@@ -2287,10 +2242,9 @@ const createButtonRow = tab => {
   };
 };
 
-const confirm = function confirm(tab, title, message) {
-  let {
-    useEditorClasses = false
-  } = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+const confirm = (tab, title, message, {
+  useEditorClasses = false
+} = {}) => {
   const {
     remove,
     container,
@@ -2341,11 +2295,9 @@ const confirm = function confirm(tab, title, message) {
     });
   });
 };
-const prompt = function prompt(tab, title, message) {
-  let defaultValue = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
-  let {
-    useEditorClasses = false
-  } = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+const prompt = (tab, title, message, defaultValue = '', {
+  useEditorClasses = false
+} = {}) => {
   const {
     remove,
     container,
@@ -2423,8 +2375,7 @@ if (!Blob.prototype.text) {
 }
 
 if (!Array.prototype.flat) {
-  Array.prototype.flat = function () {
-    let depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  Array.prototype.flat = function (depth = 1) {
     const result = [];
 
     for (const i of this) {

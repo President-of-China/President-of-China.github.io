@@ -81,12 +81,11 @@ const _twGetAsset = path => {
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (async _ref => {
-  let {
-    addon,
-    console,
-    msg
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async ({
+  addon,
+  console,
+  msg
+}) => {
   let prevEventHandler; // 250-ms rate limit
 
   const rateLimiter = new _libraries_common_cs_rate_limiter_js__WEBPACK_IMPORTED_MODULE_2__["default"](250); // get the color from scratch
@@ -118,10 +117,9 @@ const _twGetAsset = path => {
     if (!addon.tab.redux.state || !addon.tab.redux.state.scratchPaint) return; // The only way to reliably set color is to invoke eye dropper via click()
     // then faking that the eye dropper reported the value.
 
-    const onEyeDropperOpened = _ref2 => {
-      let {
-        detail
-      } = _ref2;
+    const onEyeDropperOpened = ({
+      detail
+    }) => {
       if (detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
       setTimeout(() => {
@@ -313,11 +311,9 @@ const _twGetAsset = path => {
       window.addEventListener("pointerup", mouseupfunc);
     });
 
-    prevEventHandler = _ref3 => {
-      let {
-        detail
-      } = _ref3;
-
+    prevEventHandler = ({
+      detail
+    }) => {
       if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
         setTimeout(() => {
           updateColor();
@@ -399,9 +395,7 @@ class RateLimiter {
     this.wait = wait;
   }
 
-  abort() {
-    let call = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
+  abort(call = true) {
     if (this.timeout) {
       clearTimeout(this.timeout);
       if (call) this.callback();

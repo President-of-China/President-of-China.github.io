@@ -28,10 +28,9 @@ const resources = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (async function (_ref) {
-  let {
-    addon
-  } = _ref;
+/* harmony default export */ __webpack_exports__["default"] = (async function ({
+  addon
+}) {
   const vm = addon.tab.traps.vm;
   const oldAddSprite = vm.constructor.prototype.addSprite;
 
