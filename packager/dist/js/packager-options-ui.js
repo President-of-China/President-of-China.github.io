@@ -4981,12 +4981,13 @@ function create_if_block_10(ctx) {
 			div = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 
 			div.innerHTML = `<h2>WKWebView</h2> 
-              <p class="svelte-1iqxbmk">WKWebView is the preferred way to package for macOS. It will be hundreds of MB smaller than the other macOS environments and typically run the fastest.</p> 
+              <p class="svelte-1iqxbmk">WKWebView is the preferred way to package for macOS. It will be hundreds of MB smaller than the other macOS-specific environments and typically run the fastest.</p> 
               <p class="svelte-1iqxbmk">The app will run natively on both Intel and Apple silicon Macs running macOS 10.12 or later.</p> 
               <p class="svelte-1iqxbmk">Note that:</p> 
-              <ul><li>Video sensing and loudness blocks will not work</li> 
-                <li>Extremely large projects might cause crashes</li></ul> 
-              <p class="svelte-1iqxbmk">Use &quot;Electron macOS Application&quot; or &quot;Plain HTML&quot; if you encounter these issues.</p>`;
+              <ul><li>Video sensing and loudness blocks will only work in macOS 12 or later.</li> 
+                <li>Pointer lock will not work.</li> 
+                <li>Extremely large projects might not work properly.</li></ul> 
+              <p class="svelte-1iqxbmk">Use the &quot;Electron macOS Application&quot; (inside Other environments) or &quot;Plain HTML&quot; environments instead if you encounter these issues.</p>`;
 		},
 		m(target, anchor) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div, anchor);
@@ -5274,7 +5275,7 @@ function create_default_slot_4(ctx) {
 	};
 }
 
-// (950:2) <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
+// (951:2) <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
 function create_default_slot_3(ctx) {
 	let div3;
 	let div0;
@@ -5375,7 +5376,7 @@ function create_default_slot_3(ctx) {
 	};
 }
 
-// (949:0) <Section>
+// (950:0) <Section>
 function create_default_slot_2(ctx) {
 	let droparea;
 	let current;
@@ -5421,7 +5422,7 @@ function create_default_slot_2(ctx) {
 	};
 }
 
-// (965:0) <Section>
+// (966:0) <Section>
 function create_default_slot_1(ctx) {
 	let div2;
 	let div0;
@@ -5494,7 +5495,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (982:29) 
+// (983:29) 
 function create_if_block_1(ctx) {
 	let section;
 	let current;
@@ -5539,7 +5540,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (976:0) {#if result}
+// (977:0) {#if result}
 function create_if_block(ctx) {
 	let downloads;
 	let current;
@@ -5582,7 +5583,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (983:2) <Section caption>
+// (984:2) <Section caption>
 function create_default_slot(ctx) {
 	let p;
 	let t_value = /*$_*/ ctx[7]('options.downloadsWillAppearHere') + "";
@@ -7343,7 +7344,7 @@ const decode = (str) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buildId", function() { return SCAFFOLDING_BUILD_ID; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "verifyBuildId", function() { return verifyBuildId; });
-const SCAFFOLDING_BUILD_ID = Math.random().toString();
+const SCAFFOLDING_BUILD_ID = ("development-" + Math.random().toString().substring(2));
 
 const verifyBuildId = (buildId, source) => {
   if (source.endsWith('=^..^=')) {
@@ -7640,9 +7641,10 @@ __webpack_require__.r(__webpack_exports__);
 // will be tried in succession if the previous one fails, perhaps because it's blocked by a school
 // network filter.
 
-// estimatedSize is used for the download progress bar if the server or browser does not tell us
-// automatically. It's size in bytes after decoding Content-Encoding.
-// If you change these, use numbers from a production build, not a development build.
+// estimatedSize is used for the asset download progress bar if the server doesn't specify a
+// Content-Length. It's size in bytes after decoding Content-Encoding. Real size does not need to
+// match; this is just for the progress bar. estimatedSize is optional and can be omitted.
+// Make sure to use size estimates from production builds, not development ones.
 
 // useBuildId is used for various cache related things. It shouldn't be changed.
 
@@ -7656,40 +7658,49 @@ const relativeScaffolding = (name) => `scaffolding/${name}`;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   'nwjs-win64': {
-    src: externalFile('nwjs-v0.54.0-win-x64.zip'),
-    sha256: '0f082671b67b711f783d98cc989cf5aebacfc9bce3bef78875b57d08fc2a6e86'
+    src: externalFile('nwjs-v0.68.1-win-x64.zip'),
+    sha256: '82527d29f060bad7ec041f7c0536b1376f8bad5e5584adf7e3cf7205755a106c',
+    estimatedSize: 119821598
   },
   'nwjs-win32': {
-    src: externalFile('nwjs-v0.54.0-win-ia32.zip'),
-    sha256: '7a1ed3a6a51b8cdf9280761b90cb4723cf9ee8050e3ed0b58451e8e4e694b203'
+    src: externalFile('nwjs-v0.68.1-win-ia32.zip'),
+    sha256: '7dd3104c2726082a8acd8973af2b2b223bc97960b722ec141b9bf07d84a0281b',
+    estimatedSize: 112613344
   },
   'nwjs-mac': {
-    src: externalFile('nwjs-v0.54.0-osx-x64.zip'),
-    sha256: '498c97a264f8feac504c4c2396c1fddc8290c15573aee2fc692e59ff9803cc40'
+    src: externalFile('nwjs-v0.68.1-osx-x64.zip'),
+    sha256: '4b1356302738a45f7ee212f6ecb997eb5d31403bfc45a7dd58429c968a1f581a',
+    estimatedSize: 119091132
   },
   'nwjs-linux-x64': {
-    src: externalFile('nwjs-v0.54.0-linux-x64.zip'),
-    sha256: '53651a3a12d29ad096cff5b44d9f1e3aa09e9fad970bdcfe8bda07ea23d960d8'
+    src: externalFile('nwjs-v0.68.1-linux-x64.zip'),
+    sha256: '5f597add1a2b6f13592117cc955111cea8211c13b21165e29c6616f385df5b94',
+    estimatedSize: 135854818
   },
   'electron-win32': {
-    src: externalFile('electron-v17.2.0-win32-ia32.zip'),
-    sha256: '7216d0ae35c95fcdd488c720909d2320480288ef02d3f95bcb574c9ef38169b8'
+    src: externalFile('electron-v21.0.1-win32-ia32.zip'),
+    sha256: 'dab54b0ec054be51de0d56f728e96e76065f5666d804037b07ba2f211a5c8a1e',
+    estimatedSize: 89234717
   },
   'electron-win64': {
-    src: externalFile('electron-v17.2.0-win32-x64.zip'),
-    sha256: '64451d98e574d8f78754aeb73258814b4fd1a9ef4266bae5e53cdd09273a0b23'
+    src: externalFile('electron-v21.0.1-win32-x64.zip'),
+    sha256: '540c77bb85b4046fe7c297de0cb12fd3105ac5c6a504d870921172aa33d83198',
+    estimatedSize: 94833579
   },
   'electron-mac': {
-    src: externalFile('electron-v19.0.6-macos-universal.zip'),
-    sha256: 'f38e3bc8c452631cf98516e940a3364aaba36e3e028599979f4fbf1d780eaacc'
+    src: externalFile('electron-v21.0.1-macos-universal.zip'),
+    sha256: 'c31d1ef26f7b6230881a11308ebf8f4487a1a3fb7a151da0972fad77bc9e6acf',
+    estimatedSize: 154789837
   },
   'electron-linux64': {
-    src: externalFile('electron-v17.2.0-linux-x64.zip'),
-    sha256: '2d56903d91635ca7117723b5a2bc926d7f5b391c989da4233c8babf73e6e6584'
+    src: externalFile('electron-v21.0.1-linux-x64.zip'),
+    sha256: '4fd6d7b5a65f44a43165ae77d0484db992b30d6efba478a192e984506fbd52b6',
+    estimatedSize: 90635371
   },
   'webview-mac': {
-    src: externalFile('WebView-macos-3.zip'),
-    sha256: '5d4086894f10549c61c20e5f770c808afc25c2e4793da75b5b1cede294449fac'
+    src: externalFile('WebView-macos-4.zip'),
+    sha256: '580489b789b020e900417fabbe192abe24974555923c9d9280a723d2ad104314',
+    estimatedSize: 3537286
   },
   scaffolding: {
     src: relativeScaffolding('scaffolding-full.js'),
@@ -7890,7 +7901,7 @@ const generateMacReadme = (options) => `When you try to double click on the app 
 This is normal. Press cancel.
 
 To run the app:
-1) Right click on the app file (${options.app.packageName} in the same folder as this document) and select "Open".
+1) Control+click on the app file (${options.app.packageName} in the same folder as this document) and select "Open".
 2) If a warning appears, select "Open" if it's an option.
 3) If a warning appears but "Open" isn't an option, press "Cancel" and repeat from step 1.
    The open button will appear the second time the warning appears.

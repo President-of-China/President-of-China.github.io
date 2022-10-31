@@ -4907,7 +4907,7 @@ const mutateScratch3InPlace = (projectData) => {
   Object(_minify_sb3__WEBPACK_IMPORTED_MODULE_0__["default"])(projectData);
 };
 
-const downloadProject = async (projectData, progressCallback) => {
+const downloadProject = async (projectData, progressCallback = () => {}) => {
   let analysis = unknownAnalysis();
 
   const options = {
